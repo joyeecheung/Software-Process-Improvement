@@ -3,24 +3,27 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Menu</title>
+	<link rel="stylesheet" type="text/css" href="menu.css">
 </head>
 <body>
-	<h2>Three kinds of horizontal menus.</h2>
+	<h2>Four kinds of horizontal menus.</h2>
 
 	<section class="table-cell-menu">
 		<h3>Table cell</h3>
-		<ul>
-			<li>Item1</li>
-			<li>Item2</li>
-			<li>Item3</li>
-			<li>Item4</li>
-			<li>Item5</li>
-		</ul>
+		<nav class="menu">
+			<ul class="menu-list">
+				<li>Item1</li>
+				<li>Item2</li>
+				<li>Item3</li>
+				<li>Item4</li>
+				<li>Item5</li>
+			</ul>
+		</nav>
 	</section>
 
 	<section class="float-menu">
 		<h3>Floats</h3>
-		<ul>
+		<ul class="menu-list">
 			<li>Item1</li>
 			<li>Item2</li>
 			<li>Item3</li>
@@ -31,12 +34,16 @@
 
 	<section class="inline-block-menu">
 		<h3>Inline block</h3>
-		<ul>
-			<li>Item1</li>
-			<li>Item2</li>
-			<li>Item3</li>
-			<li>Item4</li>
-			<li>Item5</li>
+		<!-- For inline blocks to work without extra spacing, the white characters between tags must be removed -->
+		<ul class="menu-list">
+			<li>Item1</li><li>Item2</li><li>Item3</li><li>Item4</li><li>Item5</li></ul>
+	</section>
+
+	<section class="flex-menu">
+		<h3>Flex</h3>
+		<!-- Same as inline block -->
+		<ul class="menu-list">
+			<li>Item1</li><li>Item2</li><li>Item3</li><li>Item4</li><li>Item5</li>
 		</ul>
 	</section>
 </body>

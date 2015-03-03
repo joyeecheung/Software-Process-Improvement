@@ -1,0 +1,56 @@
+body {
+	max-width: 960px;
+	margin: 0 auto;
+}
+
+.menu-list {
+	list-style-type: none;
+	padding: 0;
+	margin: 0;
+}
+
+.menu-list li {
+	background-color: #333;
+	color: white;
+}
+
+/* table cell*/
+
+.table-cell-menu nav {
+	display: table;
+}
+
+.table-cell-menu .menu-list {
+	display: table-row;
+}
+
+.table-cell-menu .menu-list li {
+	display: table-cell;
+	padding: 10px;
+}
+
+/* float */
+
+.float-menu .menu-list {
+	overflow: hidden;
+}
+
+.float-menu .menu-list li {
+	float: left;
+	padding: 10px;
+}
+
+/* inline block */
+
+.inline-block-menu .menu-list li {
+	display: inline-block;
+	padding: 10px;
+	margin: 0;
+}
+
+/* Flex */
+
+.flex-menu .menu-list li {
+	display: inline-flex;
+	padding: 10px;
+}
