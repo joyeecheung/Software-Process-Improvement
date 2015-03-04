@@ -1,53 +1,48 @@
 html {
     font-family: sans-serif;
-    font-size: 16px;
-    background-color: gray;
+    font-size: 16px;  /* Root font size */
 }
 
 /* Simple reset */
 
-* {
+#at-plus-container * {
     padding: 0;
     margin: 0;
-    /*border: 1px solid #ccc;*/
 }
 
 #at-plus-container li {
     list-style-type: none;
 }
 
-/* the memu */
+/* The memu */
 
 #at-plus-container {
     width: 5rem;
 
-    position: absolute;
-    bottom: 0;
-    left: 50%;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 #bottom-positioner {
-    margin-bottom: 6rem;
+    position: absolute;
+    bottom: 0;
+
+    margin-bottom: 4rem;
 }
 
 /* button */
 
 #button {
-    /* Same as the large icon should be */
+    /* Same as the large at-plus icon should be */
     width: 5rem;
     height: 5rem;
-
-    color: white;
+    border-radius: 100%;
 
     position: relative;
     overflow: visible;
 }
 
 #at-plus-container:hover #button {
-    width: 5rem;
-    height: 5rem;
-    border-radius: 100%;
-
     overflow: visible;
 }
 
@@ -60,7 +55,9 @@ html {
 
     background: #bbb url(assets/images/atplus_white.png) center no-repeat;
 
+    margin: 1rem auto;
     overflow: visible;
+
     transition: all 0.5s ease-in-out;
 }
 
@@ -71,9 +68,13 @@ html {
 
     background: rgba(48, 63, 159, 1) url(assets/images/atplus_green.png) center no-repeat;
 
+    margin: 0 auto;
     overflow: visible;
+
     transition: all 0.5s ease-in-out;
 }
+
+/* Info bar */
 
 #info-bar {
     position: absolute;
@@ -81,12 +82,12 @@ html {
 }
 
 #info-bar {
-    width: 0;
-    height: 0;
+    width: 1rem;
+    height: 1rem;
     border-radius: 100%;
 
-    top: 0;
-    left: 0;
+    top: 0.5rem;
+    left: 2rem;
 
     overflow: hidden;
     transition: all 0.5s ease-in-out;
@@ -95,19 +96,20 @@ html {
 #at-plus-container:hover #info-bar {
     width: 8rem;
     height: 8rem;
+    border-radius: 100%;
 
     top: -9rem;
     left: -1.5rem;
 
-    border-radius: 100%;
+    background-color: #808080;
 
-    background-color: #666;
-    transition: all 0.5s ease-in-out;
     overflow: hidden;
+
+    transition: all 0.5s ease-in-out;
 }
 
 #info-bar li {
-    margin-top: 0.4rem;
+    margin-top: 0.5rem;
 }
 
 #info-bar li img {
@@ -117,18 +119,18 @@ html {
 
 #info-bar .mine {
     display: inline-block;
-    color: rgba(77, 225, 178, 1);
+    color: #2AD591;
 }
 
 #info-bar .page {
     color: white;
-    text-align:
 }
 
 #info-bar .page.comment {
     font-size: 2rem;
 }
 
+/* Control rings */
 
 #control-ring .button {
     width: 1rem;
@@ -136,7 +138,7 @@ html {
     border-radius: 100%;
 
     top: 0.5rem;
-    left: 0.5rem;
+    left: 2rem;
     position: absolute;
 
     transition: all 0.5s ease-in-out 0s;
@@ -147,8 +149,10 @@ html {
 #at-plus-container:hover #control-ring .button {
     width: 2.3rem;
     height: 2.3rem;
-    background-color: #666;
+    background-color: #808080;
 }
+
+/* Ring-specific style */
 
 #at-plus-container:hover .mask {
     background-image: url("assets/images/mask.png");
@@ -179,6 +183,9 @@ html {
     left: 3.7rem;
     top: 5.8rem;
 }
+
+
+/* Unread alert */
 
 #at-plus-container .unread {
     width: 0;
