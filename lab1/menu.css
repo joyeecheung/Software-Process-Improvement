@@ -1,0 +1,44 @@
+html, body {
+    height: 100%;
+}
+
+#at-plus-container {
+    width: 2rem;
+
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+}
+
+#bottom-positioner {
+    margin: auto auto 4em;
+}
+
+#at-plus-container li {
+    list-style-type: none;
+}
+
+#button {
+    width: 2rem;
+    height: 2rem;
+    border-radius: 100%;
+
+    position: relative;
+
+    background: rgba(0, 0, 0, 0.4) url(assets/images/atplus_white.png) center no-repeat;
+    color: white;
+
+    overflow: visible;
+    transition: all 0.5s ease-in-out;
+}
+
+#button:hover {
+    width: 5rem;
+    height: 5rem;
+    border-radius: 100%;
+
+    background: rgba(48,63,159,1) url(assets/images/atplus_green.png) center no-repeat;
+    color: #079E6E;
+
+    overflow: visible;
+}
