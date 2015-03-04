@@ -1,6 +1,19 @@
 html, body {
-    height: 100%;
+    font-family: sans-serif;
 }
+
+/* Simple reset */
+
+* {
+    padding: 0;
+    margin: 0;
+}
+
+#at-plus-container li {
+    list-style-type: none;
+}
+
+/* the memu */
 
 #at-plus-container {
     width: 2rem;
@@ -11,12 +24,10 @@ html, body {
 }
 
 #bottom-positioner {
-    margin: auto auto 4em;
+    margin: auto auto 4rem;
 }
 
-#at-plus-container li {
-    list-style-type: none;
-}
+/* button */
 
 #button {
     width: 2rem;
@@ -32,7 +43,7 @@ html, body {
     transition: all 0.5s ease-in-out;
 }
 
-#button:hover {
+#at-plus-container:hover #button {
     width: 5rem;
     height: 5rem;
     border-radius: 100%;
@@ -41,4 +52,59 @@ html, body {
     color: #079E6E;
 
     overflow: visible;
+    transition: all 0.5s ease-in-out;
+}
+
+#control-ring-container,
+#info-bar {
+    position: absolute;
+    text-align: center;
+}
+
+#info-bar {
+    width: 1rem;
+    height: 1rem;
+    border-radius: 100%;
+
+    top: 2rem;
+    left: 2rem;
+
+    overflow: hidden;
+    transition: all 0.5s ease-in-out;
+}
+
+#at-plus-container:hover #info-bar {
+    width: 8rem;
+    height: 8rem;
+
+    top: -9rem;
+    left: -1.5rem;
+
+    border-radius: 100%;
+
+    background-color: #666;
+    transition: all 0.5s ease-in-out;
+    overflow: hidden;
+}
+
+#info-bar li {
+    margin-top: 0.4rem;
+}
+
+#info-bar li img {
+    vertical-align: middle;
+    margin-right: 0.3rem;
+}
+
+#info-bar .mine {
+    display: inline-block;
+}
+
+#info-bar .page {
+    color: white;
+    text-align:
+}
+
+#info-bar .page.comment {
+    font-size: 2rem;
 }
