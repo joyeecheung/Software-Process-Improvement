@@ -73,13 +73,16 @@ function makeTableSortable(table) {
         if (util.hasClass(head, 'ascend')) {
             util.removeClass(head, 'ascend');
             util.addClass(head, 'descend');
+            sortColumn(table, head, DESCEND);
             head.getElementsByTagName('img')[0].src = "descend.png";
         } else if (util.hasClass(head, 'descend')) {
             util.removeClass(head, 'descend');
             util.addClass(head, 'ascend');
+            sortColumn(table, head, ASCEND);
             head.getElementsByTagName('img')[0].src = "ascend.png";
         } else {
             util.addClass(head, 'ascend');
+            sortColumn(table, head, ASCEND);
             var icon = d.createElement('img');
             icon.src = "ascend.png";
             head.appendChild(icon);
@@ -88,11 +91,33 @@ function makeTableSortable(table) {
 
     function sortColumn(table, head, direction) {
         // get the index of head
-        var index = util.nthOfType(head, type);
+        var index = util.nthOfType(head, 'th');
+        var headRow = head.parentNode;
+
         // extract the column data
+        var rows = table.getElementsByTagName('tr');
+        var rowArray = [];
+        var tableBody;
+
+        for (var i = 0, len = rows.length; i < len; ++i) {
+            var row = rows[i];
+            if (row !== headRow) {
+                if (!tableBody) tableBody = row.parentNode;
+                rowArray.push(row);
+            }
+        }
+
         // sort data to get the new order
+        rowArray.sort(function _cmp_by_td(a, b) {
+            var innerA = a.getElementsByTagName('td')[index].innerHTML;
+            var innerB = b.getElementsByTagName('td')[index].innerHTML;
+            return direction === ASCEND ? innerA > innerB : innerA < innerB;
+        });
+
         // rearange offline
-        // put back
+        for (var i = 0, len = rowArray.length; i < len; ++i) {
+            tableBody.appendChild(rowArray[i]);
+        }
     }
 
     var heads = table.getElementsByTagName('th');
