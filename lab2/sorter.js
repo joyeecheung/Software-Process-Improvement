@@ -74,18 +74,13 @@ function makeTableSortable(table) {
             util.removeClass(head, 'ascend');
             util.addClass(head, 'descend');
             sortColumn(head, DESCEND);
-            head.getElementsByTagName('img')[0].src = "descend.png";
         } else if (util.hasClass(head, 'descend')) {
             util.removeClass(head, 'descend');
             util.addClass(head, 'ascend');
             sortColumn(head, ASCEND);
-            head.getElementsByTagName('img')[0].src = "ascend.png";
         } else {
             util.addClass(head, 'ascend');
             sortColumn(head, ASCEND);
-            var icon = d.createElement('img');
-            icon.src = "ascend.png";
-            head.appendChild(icon);
         }
     }
 
@@ -109,8 +104,8 @@ function makeTableSortable(table) {
         rowArray.sort(function _cmp_by_td(a, b) {
             var innerA = a.getElementsByTagName('td')[index].innerHTML.toLowerCase();
             var innerB = b.getElementsByTagName('td')[index].innerHTML.toLowerCase();
-            if (innerA < innerB) return 1;
-            else if (innerA > innerB) return -1;
+            if (innerA < innerB) return -1;
+            else if (innerA > innerB) return 1;
             else return 0;
         });
 

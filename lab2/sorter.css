@@ -33,7 +33,18 @@ tr:nth-of-type(even) {
     padding-right: 0;
 }
 
-.ascend img, .descend img {
+.ascend:after, .descend:after {
     float: right;
-    padding-left: 10px;
+    margin-left: 10px;
+    width: 16px;
+    height: 16px;
+    content: "";
+}
+
+.ascend:after {
+    background-image: url(ascend.png);
+}
+
+.descend:after {
+    background-image: url(descend.png);
 }
