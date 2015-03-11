@@ -30,8 +30,10 @@ tr:nth-of-type(even) {
 
 .ascend, .descend {
     background-color: #A4B0FC;
+    padding-right: 0;
 }
 
 .ascend img, .descend img {
     float: right;
+    padding-left: 10px;
 }
