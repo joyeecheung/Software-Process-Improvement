@@ -70,6 +70,14 @@ function makeTableSortable(table) {
 
     function makeColumnSortable(e) {
         var head = e.currentTarget;
+        var headRow = head.parentNode.getElementsByTagName('th');
+        for (var i = 0, len = headRow.length; i < len; ++i) {
+            if (headRow[i] !== head) {
+                util.removeClass(headRow[i], 'ascend');
+                util.removeClass(headRow[i], 'descend');
+            }
+        }
+
         if (util.hasClass(head, 'ascend')) {
             util.removeClass(head, 'ascend');
             util.addClass(head, 'descend');
