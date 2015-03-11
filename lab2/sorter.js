@@ -73,32 +73,30 @@ function makeTableSortable(table) {
         if (util.hasClass(head, 'ascend')) {
             util.removeClass(head, 'ascend');
             util.addClass(head, 'descend');
-            sortColumn(table, head, DESCEND);
+            sortColumn(head, DESCEND);
             head.getElementsByTagName('img')[0].src = "descend.png";
         } else if (util.hasClass(head, 'descend')) {
             util.removeClass(head, 'descend');
             util.addClass(head, 'ascend');
-            sortColumn(table, head, ASCEND);
+            sortColumn(head, ASCEND);
             head.getElementsByTagName('img')[0].src = "ascend.png";
         } else {
             util.addClass(head, 'ascend');
-            sortColumn(table, head, ASCEND);
+            sortColumn(head, ASCEND);
             var icon = d.createElement('img');
             icon.src = "ascend.png";
             head.appendChild(icon);
         }
     }
 
-    function sortColumn(table, head, direction) {
+    function sortColumn(head, direction) {
         // get the index of head
         var index = util.nthOfType(head, 'th');
         var headRow = head.parentNode;
 
         // extract the column data
         var rows = table.getElementsByTagName('tr');
-        var rowArray = [];
-        var tableBody;
-
+        var rowArray = [], tableBody;
         for (var i = 0, len = rows.length; i < len; ++i) {
             var row = rows[i];
             if (row !== headRow) {
@@ -109,12 +107,17 @@ function makeTableSortable(table) {
 
         // sort data to get the new order
         rowArray.sort(function _cmp_by_td(a, b) {
-            var innerA = a.getElementsByTagName('td')[index].innerHTML;
-            var innerB = b.getElementsByTagName('td')[index].innerHTML;
-            return direction === ASCEND ? innerA > innerB : innerA < innerB;
+            var innerA = a.getElementsByTagName('td')[index].innerHTML.toLowerCase();
+            var innerB = b.getElementsByTagName('td')[index].innerHTML.toLowerCase();
+            if (innerA < innerB) return 1;
+            else if (innerA > innerB) return -1;
+            else return 0;
         });
 
-        // rearange offline
+        if (direction !== ASCEND)
+            rowArray.reverse();
+
+        // rearange
         for (var i = 0, len = rowArray.length; i < len; ++i) {
             tableBody.appendChild(rowArray[i]);
         }
