@@ -1,7 +1,9 @@
-;
-(function(d, undefined) {
+;(function(d) {
 "use strict";
 
+/**
+ * Cross-browser utilities
+ */
 var util = (function _util() {
     function addEvent(element, event, handler) {
         if (element.addEventListener) {
@@ -17,36 +19,40 @@ var util = (function _util() {
     }
 
     function getTarget(event) {
-        return event.target ? event.target : event.srcElement;
+        return event.target || event.srcElement;
     }
 
-    function hasClass(el, className) {
+    function hasClass(element, className) {
         var reg = new RegExp('(\\s|^)' + className + '(\\s|$)');
-        return !!el.className.match(reg);
+        return !!element.className.match(reg);
     }
 
-    function addClass(el, className) {
-        if (el.classList) {
-            el.classList.add(className);
+    function addClass(element, className) {
+        if (element.classList) {
+            element.classList.add(className);
         } else {
-            if (!hasClass(el, className))
-                el.className += " " + className;
+            if (!hasClass(element, className))
+                element.className += " " + className;
         }
     }
 
-    function removeClass(el, className) {
-        if (hasClass(el, className)) {
+    function removeClass(element, className) {
+        if (hasClass(element, className)) {
             var reg = new RegExp('(\\s|^)' + className + '(\\s|$)');
-            el.className = el.className.replace(reg, ' ');
+            element.className = element.className.replace(reg, ' ');
         }
     }
 
-    function nthOfType(el, type) {
-        var children = el.parentNode.getElementsByTagName(type);
+    function nthOfType(element, type) {
+        var children = element.parentNode.getElementsByTagName(type);
         for (var i = 0, len = children.length; i < len; ++i) {
-            if (children[i] === el) return i;
+            if (children[i] === element) return i;
         }
         return null;
+    }
+
+    function getText(node) {
+        return node.textContent || node.innerText;
     }
 
     return {
@@ -55,7 +61,8 @@ var util = (function _util() {
         hasClass: hasClass,
         addClass: addClass,
         removeClass: removeClass,
-        nthOfType: nthOfType
+        nthOfType: nthOfType,
+        getText: getText
     };
 })();
 
@@ -66,41 +73,55 @@ var util = (function _util() {
  *         The table element to be made sortable
  */
 function makeTableSortable(table) {
-    var ASCEND = 0, DESCEND = 1;
+    var ASCEND = 0, DESCEND = 1;  // directional constants
 
+    /**
+     * Make a column sortable
+     * @param  {Event} e  The Event object.
+     */
     function makeColumnSortable(e) {
         var head = e.currentTarget;
         var headRow = head.parentNode.getElementsByTagName('th');
+
         for (var i = 0, len = headRow.length; i < len; ++i) {
+            // Clear style of other heads
             if (headRow[i] !== head) {
                 util.removeClass(headRow[i], 'ascend');
                 util.removeClass(headRow[i], 'descend');
             }
         }
 
-        if (util.hasClass(head, 'ascend')) {
+        // Add style to the clicked head, and sort the column
+        if (util.hasClass(head, 'ascend')) {  // currently ascend
             util.removeClass(head, 'ascend');
             util.addClass(head, 'descend');
-            sortColumn(head, DESCEND);
-        } else if (util.hasClass(head, 'descend')) {
+            sortColumn(table, head, DESCEND);
+        } else if (util.hasClass(head, 'descend')) {  // currently descend
             util.removeClass(head, 'descend');
             util.addClass(head, 'ascend');
-            sortColumn(head, ASCEND);
-        } else {
+            sortColumn(table, head, ASCEND);
+        } else {  // neither ascend nor descend
             util.addClass(head, 'ascend');
-            sortColumn(head, ASCEND);
+            sortColumn(table, head, ASCEND);
         }
     }
 
-    function sortColumn(head, direction) {
+    /**
+     * Sort a table by the given column head with the given direction
+     * @param  {HTMLTableElement}     table
+     * @param  {HTMLTableCellElement} head
+     * @param  {Number}               direction
+     */
+    function sortColumn(table, head, direction) {
+        var headRow = head.parentNode;
+        var i, len;
         // get the index of head
         var index = util.nthOfType(head, 'th');
-        var headRow = head.parentNode;
 
-        // extract the column data
+        // push data rows into an array
         var rows = table.getElementsByTagName('tr');
         var rowArray = [], tableBody;
-        for (var i = 0, len = rows.length; i < len; ++i) {
+        for (i = 0, len = rows.length; i < len; ++i) {
             var row = rows[i];
             if (row !== headRow) {
                 if (!tableBody) tableBody = row.parentNode;
@@ -108,10 +129,12 @@ function makeTableSortable(table) {
             }
         }
 
-        // sort data to get the new order
+        // sort the data rows by selected column
         rowArray.sort(function _cmp_by_td(a, b) {
-            var innerA = a.getElementsByTagName('td')[index].innerHTML.toLowerCase();
-            var innerB = b.getElementsByTagName('td')[index].innerHTML.toLowerCase();
+            var innerA = util.getText(a.getElementsByTagName('td')[index]),
+                innerB = util.getText(b.getElementsByTagName('td')[index]);
+            innerA = innerA.toLowerCase();
+            innerB = innerB.toLowerCase();
             if (innerA < innerB) return -1;
             else if (innerA > innerB) return 1;
             else return 0;
@@ -120,28 +143,40 @@ function makeTableSortable(table) {
         if (direction !== ASCEND)
             rowArray.reverse();
 
-        // rearange
-        for (var i = 0, len = rowArray.length; i < len; ++i) {
+        // put back to DOM
+        for (i = 0, len = rowArray.length; i < len; ++i) {
             tableBody.appendChild(rowArray[i]);
         }
     }
 
-    var heads = table.getElementsByTagName('th');
-    for (var i = 0, len = heads.length; i < len; ++i) {
-        util.addEvent(heads[i], 'click', makeColumnSortable);
+    /**
+     * Attach event listeners for the table
+     */
+    function init(table) {
+        var heads = table.getElementsByTagName('th');
+        for (var i = 0, len = heads.length; i < len; ++i) {
+            util.addEvent(heads[i], 'click', makeColumnSortable);
+        }
     }
+
+    init(table);
 }
 
+/**
+ * Get all tables in the page.
+ */
 function getAllTables() {
     return d.getElementsByTagName('table');
 }
 
+/**
+ * Make given tables sortable.
+ */
 function makeAllTablesSortable(tables) {
     for (var i = 0, len = tables.length; i < len; ++i) {
         makeTableSortable(tables[i]);
     }
 }
-
 
 window.onload = function() {
     var tables = getAllTables();
