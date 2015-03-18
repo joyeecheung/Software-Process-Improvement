@@ -1,29 +1,29 @@
 /**************** Weird inheritance ********************/
-function extend(parent, child) {
+function extend(base, derived) {
   /**
-   * Nest the functions of a child inside its parent
-   * (parent methods get called first),
-   * mix the properties of the child and the parent,
+   * Nest the functions of a derived inside its base
+   * (base methods get called first),
+   * mix the properties of the derived and the base,
    * and patch these into the constructor
    */
-  function nest(constructor, parent, child) {
-    for (var key in child) {
-      if (child.hasOwnProperty(key)) {
-        constructor[key] = child[key];
+  function nest(constructor, base, derived) {
+    for (var key in derived) {
+      if (derived.hasOwnProperty(key)) {
+        constructor[key] = derived[key];
       }
     }
 
-    for (key in parent) {
-      if (parent.hasOwnProperty(key)) {
-        if(typeof parent[key] === 'function') {
+    for (key in base) {
+      if (base.hasOwnProperty(key)) {
+        if(typeof base[key] === 'function') {
           constructor[key] = function() {
             // Call base method first, then the derived method
-            parent[key].apply(this, arguments);
-            if(child[key]) child[key].apply(this, arguments);
+            base[key].apply(this, arguments);
+            if(derived[key]) derived[key].apply(this, arguments);
           };
         } else {
-          // fall back to parent property
-          constructor[key] = child[key] || parent[key];
+          // fall back to base property
+          constructor[key] = derived[key] || base[key];
         }
       }
     }
@@ -31,14 +31,14 @@ function extend(parent, child) {
 
   // The new extended class
   var constructor = function() {
-    // Call parent constructor first, then child constructor
-    parent.apply(this, arguments);
-    child.apply(this, arguments);
+    // Call base constructor first, then derived constructor
+    base.apply(this, arguments);
+    derived.apply(this, arguments);
   };
 
   // The weird nesting behavior. ES6 cries.
-  nest(constructor, parent, child);
-  nest(constructor.prototype, parent.prototype, child.prototype);
+  nest(constructor, base, derived);
+  nest(constructor.prototype, base.prototype, derived.prototype);
 
   return constructor;
 }
@@ -72,8 +72,16 @@ Derived.prototype.instanceMethod = function() {
 };
 
 /****** Check behavior *****/
-Derived = extend(Base, Derived);
+console.log("1 ------------------");
 
+Derived = extend(Base, Derived);
 example = new Derived('example');
 Derived.staticMethod();
 example.instanceMethod();
+
+console.log("2 ------------------");
+
+example = new Derived('example');
+otherExample = new Derived('other-example');
+example.instanceMethod();
+otherExample.instanceMethod();

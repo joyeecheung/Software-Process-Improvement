@@ -1,0 +1,20 @@
+.ascend, .descend {
+    background-color: #A4B0FC;
+    padding-right: 0;
+}
+
+.ascend:after, .descend:after {
+    float: right;
+    margin-left: 10px;
+    width: 16px;
+    height: 16px;
+    content: "";
+}
+
+.ascend:after {
+    background-image: url(../img/ascend.png);
+}
+
+.descend:after {
+    background-image: url(../img/descend.png);
+}

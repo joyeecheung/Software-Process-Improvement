@@ -1,0 +1,29 @@
+body {
+    font-family: "Times New Roman", serif;
+}
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+    font-family: "Helvetica neue", Helvetica, Arial, sans-serif;
+}
+
+th, td {
+    border: 1px solid #BDBDBD;
+    padding-right: 26px;
+}
+
+th {
+    color: white;
+    background-color: #031B7F;
+    text-align: left;
+}
+
+tr:nth-of-type(odd) {
+    background-color: white;
+}
+
+
+tr:nth-of-type(even) {
+    background-color: #DDDDDD;
+}
