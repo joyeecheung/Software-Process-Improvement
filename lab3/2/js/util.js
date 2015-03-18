@@ -1,4 +1,4 @@
-;var util = (function _util() {
+;var util = (function _util(d) {
 "use strict";
 
 function addEvent(element, event, handler) {
@@ -22,7 +22,7 @@ function hasClass(element, className) {
     if (element.classList) {
         return element.classList.contains(className);
     } else {
-        var reg = new RegExp('(\\s|^)' + className + '(\\s|$)');
+        var reg = new RegExp('(\\s|^)' + className + '(\\s|$)', 'g');
         return !!element.className.match(reg);
     }
 }
@@ -39,7 +39,7 @@ function removeClass(element, className) {
     if (element.classList) {
         element.classList.remove(className);
     } else if (hasClass(element, className)) {
-        var reg = new RegExp('(\\s|^)' + className + '(\\s|$)');
+        var reg = new RegExp('(\\s|^)' + className + '(\\s|$)', 'g');
         element.className = element.className.replace(reg, ' ');
     }
 }
@@ -58,7 +58,7 @@ function getText(node) {
 
 function getParentUntil(node, tag) {
     var parent = node.parentNode;
-    while (parent.nodeName.toLowerCase() !== tag && parent != null) {
+    while (parent.nodeName.toLowerCase() !== tag && parent !== null) {
         parent = parent.parentNode;
     }
     return parent;
@@ -77,6 +77,28 @@ function getDataRows(table) {
     return rowArray;
 }
 
+function createElement(tag, text, className) {
+    var element = d.createElement(tag);
+    if (text) {
+        var textNode = d.createTextNode(text);
+        element.appendChild(textNode);
+    }
+
+    if (className) {
+        addClass(element, className);
+    }
+
+    return element;
+}
+
+function toArray(iterable) {
+    var arr = [];
+    for (var i = 0, len = iterable.length; i < len; ++i) {
+        arr.push(iterable[i]);
+    }
+    return arr;
+}
+
 return {
     addEvent: addEvent,
     getTarget: getTarget,
@@ -86,6 +108,8 @@ return {
     nthOfType: nthOfType,
     getText: getText,
     getParentUntil: getParentUntil,
-    getDataRows: getDataRows
+    getDataRows: getDataRows,
+    createElement: createElement,
+    toArray: toArray
 };
-})();
+})(document);

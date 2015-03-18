@@ -11,7 +11,7 @@ function getAllTables() {
 util.addEvent(window, 'load', function() {
     var tables = getAllTables();
     makeAllTablesSortable(tables);
-    // makeAllTablesFilterable(tables);
+    makeAllTablesFilterable(tables);
 });
 
 }(document));
