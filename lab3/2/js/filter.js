@@ -18,10 +18,10 @@ function makeTableFilterable(table) {
     function filterRows(e) {
         // get input
         var keyword = util.getTarget(e).value.toLowerCase();
-        var matchingRows = [];
+        var matchingRows = [], i, len;
         if (keyword !== "") {
             // rows are in closure
-            for (var i = 0, len = dataRows.length; i < len; ++i) {
+            for (i = 0, len = dataRows.length; i < len; ++i) {
                 // search each column for the keyword
                 var columns = dataRows[i].getElementsByTagName('td');
                 for (var j = 0, columnLen = columns.length; j < columnLen; ++j) {
