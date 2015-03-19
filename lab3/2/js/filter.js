@@ -12,6 +12,12 @@ function makeTableFilterable(table) {
     var dataRows = util.getDataRows(table);
     var tableBody = dataRows[0].parentNode;
 
+    function highlightText(keyword, textNode) {
+        var re = new RegExp('(' + keyword + ')', 'ig');
+        var wrap = '<mark class="table-filter-key">$1</mark>';
+        textNode.parentNode.innerHTML = textNode.parentNode.innerHTML.replace(re, wrap);
+    }
+
     /**
      * Filter by input
      */
@@ -29,9 +35,7 @@ function makeTableFilterable(table) {
                     // clone the row if matched, highlight the keyword
                     if (text.indexOf(keyword) !== -1) {
                         var clone = dataRows[i].cloneNode(true);
-                        var re = new RegExp('(' + keyword + ')', 'ig');
-                        var wrap = '<span class="table-filter-key">$1</span>';
-                        clone.innerHTML = clone.innerHTML.replace(re, wrap);
+                        util.traverseTextNode(clone, highlightText.bind(null, keyword));
                         matchingRows.push(clone);
                         break;
                     }

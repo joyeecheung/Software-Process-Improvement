@@ -99,6 +99,23 @@ function toArray(iterable) {
     return arr;
 }
 
+function traverseTextNode(node, callback) {
+    var next = node;
+    var ELEMENT_NODE = 1, TEXT_NODE = 3;
+ 
+    if (node && node.nodeType === ELEMENT_NODE) {
+        do {
+            traverseTextNode(next.firstChild, callback);
+            next = next.nextSibling;
+        } while(next);
+    } else if (node && node.nodeType === TEXT_NODE) {
+        if (!/^\s+$/.test(node.nodeValue))
+            callback(node);
+        if (node.nextSibling)
+            traverseTextNode(node.nextSibling, callback);
+    }
+}
+
 return {
     addEvent: addEvent,
     getTarget: getTarget,
@@ -110,6 +127,7 @@ return {
     getParentUntil: getParentUntil,
     getDataRows: getDataRows,
     createElement: createElement,
-    toArray: toArray
+    toArray: toArray,
+    traverseTextNode: traverseTextNode
 };
 })(document);
