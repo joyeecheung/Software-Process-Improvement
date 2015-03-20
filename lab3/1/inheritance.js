@@ -15,11 +15,11 @@ function extend(base, derived) {
 
     for (key in base) {
       if (base.hasOwnProperty(key)) {
-        if(typeof base[key] === 'function') {
+        if (typeof base[key] === 'function') {
           constructor[key] = function() {
             // Call base method first, then the derived method
             base[key].apply(this, arguments);
-            if(derived[key]) derived[key].apply(this, arguments);
+            if (derived[key]) derived[key].apply(this, arguments);
           };
         } else {
           // fall back to base property
