@@ -83,5 +83,6 @@ console.log("2 ------------------");
 
 example = new Derived('example');
 otherExample = new Derived('other-example');
+Derived.staticMethod();
 example.instanceMethod();
 otherExample.instanceMethod();
