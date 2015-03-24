@@ -21,25 +21,41 @@ html {
 /* The memu */
 
 #at-plus-container {
-    width: 5rem;
+    position: fixed;
+    bottom: 6rem;
 
-    margin-left: auto;
-    margin-right: auto;
+    width: 2rem;
+    height: 2rem;
+
+    left: 50%;
+    transform: translateX(-50%);
+
+    transition: all 0.6s ease;
+}
+
+#at-plus-container:hover {
+    bottom: 0;
+
+    width: 16rem;
+    height: 18rem;
 }
 
 #bottom-positioner {
     position: absolute;
-    bottom: 0;
+    top: 0;
+    left: 0;
 
-    margin-bottom: 4rem;
+    transition: all 0.6s ease;
+}
+
+#at-plus-container:hover #bottom-positioner {
+    top: 10rem;
+    left: 7rem;
 }
 
 /* button */
 
 #button {
-    /* Same as the large at-plus icon should be */
-    width: 5rem;
-    height: 5rem;
     border-radius: 100%;
 
     position: relative;
@@ -50,32 +66,52 @@ html {
     overflow: visible;
 }
 
-#at-plus-container .icon {
+#at-plus-container .apb {
+    position: absolute;
+    top: -1rem;
+    left: -1rem;
+
     width: 2rem;
     height: 2rem;
+
+    transition: all 0.3s ease 0.5s;
+
+    border-radius: 100%;
+    background-color: rgba(0, 0, 60, .4);
+} 
+
+#at-plus-container:hover .apb {
+    position: absolute;
+
+    top: -1.5rem;
+    left: -1.5rem;
+
+    width: 3rem;
+    height: 3rem;
+
+    transition: all 0.6s ease;
     border-radius: 100%;
 
-    position: relative;
+    background-color: rgba(48, 63, 159, 1);
+}
 
-    background: #bbb url(assets/images/atplus_white.png) center no-repeat;
+#at-plus-container .icon {
+    width: 100%;
+    height: 100%;
 
-    margin: 1rem auto;
-    overflow: visible;
+    background: url(assets/images/atplus_white.png) center no-repeat;
+    background-size: 80%;
 
-    transition: all 0.5s ease-in-out;
+    transition: background-image 0.5s ease,
+                width 0.5s ease 0.5s,
+                height 0.5s ease 0.5s;
 }
 
 #at-plus-container:hover .icon {
-    width: 5rem;
-    height: 5rem;
-    border-radius: 100%;
+    background: url(assets/images/atplus_green.png) center no-repeat;
+    background-size: 80%;
 
-    background: rgba(48, 63, 159, 1) url(assets/images/atplus_green.png) center no-repeat;
-
-    margin: 0 auto;
-    overflow: visible;
-
-    transition: all 0.5s ease-in-out;
+    transition: all 0.6s ease;
 }
 
 /* Info bar */
@@ -90,11 +126,11 @@ html {
     height: 1rem;
     border-radius: 100%;
 
-    top: 0.5rem;
-    left: 2rem;
+    top: -0.5rem;
+    left: -0.5rem;
 
     overflow: hidden;
-    transition: all 0.5s ease-in-out;
+    transition: all 0.6s ease;
 }
 
 #at-plus-container:hover #info-bar {
@@ -102,14 +138,18 @@ html {
     height: 8rem;
     border-radius: 100%;
 
-    top: -9rem;
-    left: -1.5rem;
+    top: -10rem;
+    left: -4rem;
 
-    background-color: #808080;
+    background-color: rgba(0, 0, 10, .4);
 
     overflow: hidden;
 
-    transition: all 0.5s ease-in-out;
+    transition: all 0.6s ease;
+}
+
+#at-plus-container:hover #info-bar:hover {
+    background-color: #444;
 }
 
 #info-bar li {
@@ -141,51 +181,57 @@ html {
     height: 1rem;
     border-radius: 100%;
 
-    top: 0.5rem;
-    left: 2rem;
+    top: -0.5rem;
+    left: -0.5rem;
     position: absolute;
 
-    transition: all 0.5s ease-in-out;
+    transition: all 0.6s ease;
     background-repeat: no-repeat;
     background-position: center;
+
+    background-size: 50%;
 }
 
 #at-plus-container:hover #control-ring .button {
-    width: 2.3rem;
-    height: 2.3rem;
-    background-color: #808080;
+    width: 2rem;
+    height: 2rem;
+    background-color: rgba(0, 0, 10, .4);
+}
+
+#at-plus-container:hover #control-ring .button:hover {
+    background-color: #444;
 }
 
 /* Ring-specific style */
 
 #at-plus-container:hover .mask {
     background-image: url("assets/images/mask.png");
-    left: -2.8rem;
-    top: -1.9rem;
+    left: -4.4rem;
+    top: -2.5rem;
 }
 
 #at-plus-container:hover .history {
     background-image: url("assets/images/history.png");
-    left: -3.8rem;
-    top: 1.1rem;
+    left: -4.7rem;
+    top: -0.2rem;
 }
 
 #at-plus-container:hover .message {
     background-image: url("assets/images/message.png");
-    left: -2.8rem;
-    top: 4.1rem;
+    left: -3.6rem;
+    top: 1.9rem;
 }
 
 #at-plus-container:hover .setting {
     background-image: url("assets/images/setting.png");
-    left: 0;
-    top: 6.2rem;
+    left: -1.3rem;
+    top: 2.8rem;
 }
 
 #at-plus-container:hover .sign {
     background-image: url("assets/images/signout.png");
-    left: 3.7rem;
-    top: 5.8rem;
+    left: 1.2rem;
+    top: 2rem;
 }
 
 
@@ -205,18 +251,24 @@ html {
     right: -0.2rem;
     top: -0.2rem;
 
-    transition: all 0.5s ease-in-out;
+    transition: all 0.6s ease;
 }
 
 #at-plus-container:hover .unread {
-    width: 1.2rem;
-    height: 1.2rem;
+    width: 1rem;
+    height: 1rem;
     border-radius: 100%;
 
     color: white;
     background-color: red;
 
-    font-size: 0.8rem;
+    font-size: 0.6rem;
 
-    transition: all 0.5s ease-in-out;
+    transition: all 0.6s ease;
+}
+
+#at-plus-container #control-ring .button,
+#at-plus-container #info-bar,
+#at-plus-container .apb {
+    cursor: pointer;
 }
