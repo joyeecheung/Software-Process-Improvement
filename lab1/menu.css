@@ -36,7 +36,7 @@ html {
 #at-plus-container:hover {
     bottom: 0;
 
-    width: 14rem;
+    width: 12rem;
     height: 18rem;
 }
 
@@ -50,7 +50,7 @@ html {
 
 #at-plus-container:hover #bottom-positioner {
     top: 10rem;
-    left: 6rem;
+    left: 5rem;
 }
 
 /* button */
