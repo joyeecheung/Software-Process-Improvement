@@ -99,7 +99,7 @@ html {
     width: 100%;
     height: 100%;
 
-    background: url(assets/images/atplus_white.png) center no-repeat;
+    background: url(../assets/images/atplus_white.png) center no-repeat;
     background-size: 80%;
 
     transition: background-image 0.5s ease,
@@ -108,7 +108,7 @@ html {
 }
 
 #at-plus-container:hover .icon {
-    background: url(assets/images/atplus_green.png) center no-repeat;
+    background: url(../assets/images/atplus_green.png) center no-repeat;
     background-size: 80%;
 
     transition: all 0.6s ease;
@@ -129,6 +129,7 @@ html {
     top: -0.5rem;
     left: -0.5rem;
 
+    color: transparent;
     overflow: hidden;
     transition: all 0.6s ease;
 }
@@ -142,36 +143,14 @@ html {
     left: -4rem;
 
     background-color: rgba(0, 0, 10, .4);
+    color: #2AD591;
+    font-size: 2rem;
+
+    line-height: 8rem;
 
     overflow: hidden;
 
     transition: all 0.6s ease;
-}
-
-#at-plus-container:hover #info-bar:hover {
-    background-color: #444;
-}
-
-#info-bar li {
-    margin-top: 0.5rem;
-}
-
-#info-bar li img {
-    vertical-align: middle;
-    margin-right: 0.3rem;
-}
-
-#info-bar .mine {
-    display: inline-block;
-    color: #2AD591;
-}
-
-#info-bar .page {
-    color: white;
-}
-
-#info-bar .page.comment {
-    font-size: 2rem;
 }
 
 /* Control rings */
@@ -185,9 +164,11 @@ html {
     left: -0.5rem;
     position: absolute;
 
+    text-align: center;
+    line-height: 2rem;
+
     transition: all 0.6s ease;
-    background-repeat: no-repeat;
-    background-position: center;
+    color: transparent;
 
     background-size: 50%;
 }
@@ -195,41 +176,39 @@ html {
 #at-plus-container:hover #control-ring .button {
     width: 2rem;
     height: 2rem;
-    background-color: rgba(0, 0, 10, .4);
+
+    color: #2AD591;
+    background-color: rgba(48, 63, 159, 1);
 }
 
-#at-plus-container:hover #control-ring .button:hover {
-    background-color: #444;
+#at-plus-container:hover #control-ring .button.disabled {
+    color: white;
+    background-color: rgba(0, 0, 10, .4);
 }
 
 /* Ring-specific style */
 
-#at-plus-container:hover .mask {
-    background-image: url("assets/images/mask.png");
+#at-plus-container:hover #button-a {
     left: -4.4rem;
     top: -2.5rem;
 }
 
-#at-plus-container:hover .history {
-    background-image: url("assets/images/history.png");
+#at-plus-container:hover #button-b {
     left: -4.7rem;
     top: -0.2rem;
 }
 
-#at-plus-container:hover .message {
-    background-image: url("assets/images/message.png");
+#at-plus-container:hover #button-c {
     left: -3.6rem;
     top: 1.9rem;
 }
 
-#at-plus-container:hover .setting {
-    background-image: url("assets/images/setting.png");
+#at-plus-container:hover #button-d {
     left: -1.3rem;
     top: 2.8rem;
 }
 
-#at-plus-container:hover .sign {
-    background-image: url("assets/images/signout.png");
+#at-plus-container:hover #button-e {
     left: 1.2rem;
     top: 2rem;
 }
@@ -237,7 +216,7 @@ html {
 
 /* Unread alert */
 
-#at-plus-container .unread {
+#at-plus-container .random {
     width: 0;
     height: 0;
     border-radius: 100%;
@@ -251,10 +230,11 @@ html {
     right: -0.2rem;
     top: -0.2rem;
 
+    line-height: 1rem;
     transition: all 0.6s ease;
 }
 
-#at-plus-container:hover .unread {
+#at-plus-container:hover .random {
     width: 1rem;
     height: 1rem;
     border-radius: 100%;
