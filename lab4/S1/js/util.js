@@ -3,14 +3,24 @@
 
 function addEvent(element, event, handler) {
     if (element.addEventListener) {
-        element.addEventListener(event, handler);
+        element.addEventListener(event, handler, false);
     } else {
+        element['e' + event + handler] = handler;
+        element[event + handler] = function(e) {
+            e.currentTarget = element;
+            element['e' + event + handler](e || window.event);
+        }
         element.attachEvent('on' + event,   // for IE8-
-            function _handler_wrapper(e) {
-                e.currentTarget = element;
-                handler(e);
-            }
-        );
+                             element[event + handler]);
+    }
+}
+
+function removeEvent(element, event, handler) {
+    if (element.removeEventListener)
+        element.removeEventListener(event, handler);
+    else {
+        element.detachEvent('on' + event, element[event + handler]);
+        element[event + handler] = null;
     }
 }
 
@@ -91,6 +101,10 @@ function createElement(tag, text, className) {
     return element;
 }
 
+function removeElement(element) {
+    return element.parentNode.removeChild(element);
+}
+
 function toArray(iterable) {
     var arr = [];
     for (var i = 0, len = iterable.length; i < len; ++i) {
@@ -118,6 +132,7 @@ function traverseTextNode(node, callback) {
 
 return {
     addEvent: addEvent,
+    removeEvent: removeEvent,
     getTarget: getTarget,
     hasClass: hasClass,
     addClass: addClass,
@@ -127,6 +142,7 @@ return {
     getParentUntil: getParentUntil,
     getDataRows: getDataRows,
     createElement: createElement,
+    removeElement: removeElement,
     toArray: toArray,
     traverseTextNode: traverseTextNode
 };
