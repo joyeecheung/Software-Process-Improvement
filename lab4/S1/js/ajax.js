@@ -4,12 +4,13 @@
       OK = 200;
 
   function core(method, url, args) {
+    url = url + '?ts=' + Date.now();  // add time stamp to avoid cache
     // Establishing a promise in return
     return new Promise(function(resolve, reject) {
       // Instantiates the XMLHttpRequest
       var client = new XMLHttpRequest();
       client.open(method, url, true);
-
+      client.setRequestHeader("Cache-Control", "no-cache, no-store");
       util.addEvent(client, 'readystatechange', function(e) {
         var me = e.target;
         if (me.readyState === DONE) {
