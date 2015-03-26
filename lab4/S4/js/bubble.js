@@ -99,12 +99,22 @@
       marks[buttons[i].id] = null;
     }
 
+    var sequence = [];
     for (i = 0; i < numButtons; ++i) {
-      promise = (typeof promise === 'undefined') ? clickButton(0) :
+      sequence.push(i);
+    }
+    
+    sequence = util.shuffle(sequence);
+
+    var text = 'Sequence: ' + sequence.join(', ');
+    document.body.appendChild(util.createElement('p', text));
+
+    for (i = 0; i < numButtons; ++i) {
+      promise = (typeof promise === 'undefined') ? clickButton(sequence[i]) :
         promise.then(
           (function(idx) {
             return function() {
-              console.log(arguments); return clickButton(idx);
+              console.log(arguments); return clickButton(sequence[idx]);
             }
           })(i)
         )

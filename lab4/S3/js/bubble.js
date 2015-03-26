@@ -19,13 +19,6 @@
         random = util.createElement('span', '...', 'random');
         button.appendChild(random);
       }
-
-      // disable other buttons
-      for (var i = 0, len = buttons.length; i < len; ++i) {
-        if (buttons[i] !== button) {
-          util.addClass(buttons[i], 'disabled');
-        }
-      }
     }
   }
 
@@ -36,13 +29,6 @@
 
     // disable this button
     util.addClass(button, 'disabled');
-
-    // enable other buttons
-    for (var i = 0, len = buttons.length; i < len; ++i) {
-      if (buttons[i] !== button && !buttons[i].getElementsByClassName('random')[0]) {
-        util.removeClass(buttons[i], 'disabled');
-      }
-    }
   }
 
   function checkInfo() {
@@ -88,7 +74,7 @@
     util.removeEvent(info, 'click', calculate);
     util.addClass(info, 'disabled');
 
-    var promise;
+    var promises = [];
     // attach handlers
     for (var i = 0, len = buttons.length; i < len; ++i) {
       // remove number
@@ -100,16 +86,10 @@
     }
 
     for (i = 0; i < numButtons; ++i) {
-      promise = (typeof promise === 'undefined') ? clickButton(0) :
-        promise.then(
-          (function(idx) {
-            return function() {
-              console.log(arguments); return clickButton(idx);
-            }
-          })(i)
-        )
+      promises.push(clickButton(i));
     }
-    promise.then(calculate);
+    
+    Promise.all(promises).then(calculate);
   }
 
   util.addEvent(window, 'load', function() {
