@@ -64,10 +64,13 @@
     try {
       if (newValue === this)
         throw new TypeError('A promise cannot be resolved with itself.');
-      if (newValue && (typeof newValue === 'object' || typeof newValue === 'function')) {
-        var then = newValue.then; // a promise
-        if (typeof then === 'function') {
-          doResolve(bind(then, newValue), bind(resolve, this), bind(reject, this));
+      if (newValue && (typeof newValue === 'object' ||
+                       typeof newValue === 'function')) {
+        var then = newValue.then;
+        if (typeof then === 'function') { // thenable
+          doResolve(bind(then, newValue),
+                    bind(resolve, this),
+                    bind(reject, this));
           return;
         }
       }
@@ -188,7 +191,8 @@
   };
 
   Promise.resolve = function(value) {
-    if (value && typeof value === 'object' && value.constructor === Promise) {
+    if (value && typeof value === 'object' &&
+        value.constructor === Promise) {
       return value;
     }
 
