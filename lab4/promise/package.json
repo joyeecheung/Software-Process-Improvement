@@ -1,0 +1,17 @@
+{
+  "name": "promise",
+  "version": "1.0.0",
+  "description": "",
+  "main": "promise.js",
+  "dependencies": {
+    "promises-aplus-tests": "*"
+  },
+  "devDependencies": {
+      "promises-aplus-tests": "*"
+  },
+  "scripts": {
+      "test": "promises-aplus-tests adapter.js"
+  },
+  "author": "Joyee Cheung",
+  "license": "ISC"
+}
