@@ -15,7 +15,7 @@
         var me = e.target;
         if (me.readyState === DONE) {
           if (me.status === OK) {
-            resolve(me.response);
+            resolve(me.responseText);
           } else {
             reject({
               "error": me.statusText

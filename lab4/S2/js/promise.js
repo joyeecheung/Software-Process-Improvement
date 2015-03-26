@@ -1,111 +1,111 @@
 /**
- * Lightweight Promise/A+ polyfill for the browser and node.
+ * Promise/A+ polyfill for the browser and node.
+ * Tested by https://github.com/promises-aplus/promises-tests
  */
 (function() {
   'use strict';
 
   var root;
-
   if (typeof window === 'object' && window) {
-    root = window;
+    root = window; // browser
   } else {
-    root = global;
+    root = global; // node, .etc.
   }
-
-  // Use polyfill for setImmediate for performance gains
-  var asap = Promise.immediateFn || root.setImmediate || function(fn) {
-    setTimeout(fn, 1);
-  };
 
   // Polyfill for Function.prototype.bind
   function bind(fn, thisArg) {
     return function() {
       fn.apply(thisArg, arguments);
-    }
+    };
   }
 
+  // Polyfill for isArray
   var isArray = Array.isArray || function(value) {
-    return Object.prototype.toString.call(value) === "[object Array]"
+    return Object.prototype.toString.call(value) === "[object Array]";
   };
 
-  function Promise(fn) {
-    if (typeof this !== 'object') throw new TypeError('Promises must be constructed via new');
-    if (typeof fn !== 'function') throw new TypeError('not a function');
-    this._state = null;
-    this._value = null;
-    this._deferreds = []
+  // Polyfill for setImmediate for performance
+  var asap = Promise.immediateFn || root.setImmediate || function(fn) {
+    setTimeout(fn, 1);
+  };
 
-    doResolve(fn, bind(resolve, this), bind(reject, this))
-  }
+  var FULLFILLED = true,
+      REJECTED = false;
 
   function handle(deferred) {
-    var me = this;
+    var that = this;
+
     if (this._state === null) {
       this._deferreds.push(deferred);
-      return
+      return;
     }
+
     asap(function() {
-      var cb = me._state ? deferred.onFulfilled : deferred.onRejected
+      var cb = that._state ? deferred.onFulfilled : deferred.onRejected;
       if (cb === null) {
-        (me._state ? deferred.resolve : deferred.reject)(me._value);
+        // pass down
+        (that._state ? deferred.resolve : deferred.reject)(that._value);
         return;
       }
+
       var ret;
       try {
-        ret = cb(me._value);
+        ret = cb(that._value);
       } catch (e) {
         deferred.reject(e);
         return;
       }
+
+      // pass down
       deferred.resolve(ret);
-    })
+    });
   }
 
   function resolve(newValue) {
-    try { //Promise Resolution Procedure: https://github.com/promises-aplus/promises-spec#the-promise-resolution-procedure
-      if (newValue === this) throw new TypeError('A promise cannot be resolved with itself.');
-      if (newValue && (typeof newValue === 'object' || typeof newValue === 'function')) {
+    try {
+      if (newValue === this)
+        throw new TypeError('A promise cannot be resolved with itself.');
+      if (newValue && (typeof newValue === 'object' ||
+                       typeof newValue === 'function')) {
         var then = newValue.then;
-        if (typeof then === 'function') {
-          doResolve(bind(then, newValue), bind(resolve, this), bind(reject, this));
+        if (typeof then === 'function') { // thenable
+          doResolve(bind(then, newValue),
+                    bind(resolve, this),
+                    bind(reject, this));
           return;
         }
       }
-      this._state = true;
+
+      this._state = FULLFILLED;
       this._value = newValue;
-      finale.call(this);
+      finalize.call(this);
     } catch (e) {
       reject.call(this, e);
     }
   }
 
   function reject(newValue) {
-    this._state = false;
+    this._state = REJECTED;
     this._value = newValue;
-    finale.call(this);
+    finalize.call(this);
   }
 
-  function finale() {
+  function finalize() {
     for (var i = 0, len = this._deferreds.length; i < len; i++) {
       handle.call(this, this._deferreds[i]);
     }
     this._deferreds = null;
   }
 
-  function Handler(onFulfilled, onRejected, resolve, reject) {
+  function Deferred(onFulfilled, onRejected, resolve, reject) {
     this.onFulfilled = typeof onFulfilled === 'function' ? onFulfilled : null;
     this.onRejected = typeof onRejected === 'function' ? onRejected : null;
     this.resolve = resolve;
     this.reject = reject;
   }
 
-  /**
-   * Take a potentially misbehaving resolver function and make sure
-   * onFulfilled and onRejected are only called once.
-   *
-   * Makes no guarantees about asynchrony.
-   */
   function doResolve(fn, onFulfilled, onRejected) {
+    // Make sure onFulfilled and onRejected are only called once
     var done = false;
     try {
       fn(function(value) {
@@ -116,59 +116,84 @@
         if (done) return;
         done = true;
         onRejected(reason);
-      })
-    } catch (ex) {
+      });
+    } catch (e) {
       if (done) return;
       done = true;
-      onRejected(ex);
+      onRejected(e);
     }
   }
 
+  function Promise(fn) {
+    if (typeof this !== 'object')
+      throw new TypeError('Promises must be constructed via new');
+    if (typeof fn !== 'function')
+      throw new TypeError('Argument is not callable');
+
+    this._state = null;
+    this._value = null;
+    this._deferreds = [];
+
+    doResolve(fn, bind(resolve, this), bind(reject, this));
+  }
+
+  // avoid explicit catch here since it is reserved in IE9-
   Promise.prototype['catch'] = function(onRejected) {
     return this.then(null, onRejected);
   };
 
   Promise.prototype.then = function(onFulfilled, onRejected) {
-    var me = this;
+    var that = this;
     return new Promise(function(resolve, reject) {
-      handle.call(me, new Handler(onFulfilled, onRejected, resolve, reject));
-    })
+      // attach a new Deferred
+      handle.call(that, new Deferred(onFulfilled, onRejected, resolve, reject));
+    });
   };
 
   Promise.all = function() {
-    var args = Array.prototype.slice.call(arguments.length === 1 && isArray(arguments[0]) ? arguments[0] : arguments);
+    var toSlice;
+    if (arguments.length === 1 && isArray(arguments[0]))
+      toSlice = arguments[0];
+    else
+      toSlice = arguments;
+    var args = Array.prototype.slice.call(toSlice);
 
     return new Promise(function(resolve, reject) {
-      if (args.length === 0) return resolve([]);
+      if (args.length === 0)
+        return resolve([]);  // empty promise
       var remaining = args.length;
 
-      function res(i, val) {
+      function start(i, value) {
         try {
-          if (val && (typeof val === 'object' || typeof val === 'function')) {
+          if (value && (typeof value === 'object' ||
+                        typeof value === 'function')) {
             var then = val.then;
-            if (typeof then === 'function') {
-              then.call(val, function(val) {
-                res(i, val)
+            if (typeof then === 'function') {  // thenable
+              then.call(val, function(nextValue) {
+                start(i, nextValue);  // then until not thenable
               }, reject);
               return;
             }
           }
-          args[i] = val;
+          args[i] = val;  // replace with return values
           if (--remaining === 0) {
             resolve(args);
           }
-        } catch (ex) {
-          reject(ex);
+        } catch (e) {
+          reject(e);
         }
       }
+
+      // test all promises
       for (var i = 0; i < args.length; i++) {
-        res(i, args[i]);
+        start(i, args[i]);
       }
     });
   };
 
   Promise.resolve = function(value) {
-    if (value && typeof value === 'object' && value.constructor === Promise) {
+    if (value && typeof value === 'object' &&
+        value.constructor === Promise) {
       return value;
     }
 
@@ -191,6 +216,7 @@
     });
   };
 
+  // fill
   if (typeof module !== 'undefined' && module.exports) {
     module.exports = Promise;
   } else if (!root.Promise) {

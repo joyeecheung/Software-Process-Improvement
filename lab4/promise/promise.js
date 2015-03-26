@@ -1,5 +1,6 @@
 /**
  * Promise/A+ polyfill for the browser and node.
+ * Tested by https://github.com/promises-aplus/promises-tests
  */
 (function() {
   'use strict';
