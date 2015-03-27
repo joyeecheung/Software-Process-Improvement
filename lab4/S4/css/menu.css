@@ -149,11 +149,20 @@ html {
     color: #2AD591;
     font-size: 2rem;
 
-    line-height: 8rem;
-
     overflow: hidden;
 
     transition: all 0.6s ease;
+}
+
+#at-plus-container #sequence {
+    display: none;
+}
+
+#at-plus-container:hover #sequence {
+    margin: 2rem 0 0.5rem 0;
+    padding: 0;
+    font-size: 1rem;
+    display: block;
 }
 
 /* Control rings */

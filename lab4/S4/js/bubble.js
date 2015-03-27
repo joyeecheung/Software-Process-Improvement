@@ -6,6 +6,7 @@
   var buttons = atplus.getElementsByClassName('button');
   var info = d.getElementById('info-bar');
   var total = d.getElementById('total');
+  var seqtext = d.getElementById('sequence');
   var marks = {};
   var numButtons = buttons.length;
   var AUTO = true;
@@ -113,7 +114,7 @@
     sequence = util.shuffle(sequence);
 
     var text = sequence.map(function(i){ return dict[i]; }).join(', ');
-    document.body.appendChild(util.createElement('p', text));
+    seqtext.innerHTML = text;
 
     var promise;
     for (var i = 0; i < numButtons; ++i) {
@@ -137,6 +138,7 @@
     marks = {};
     // remove sum
     total.innerHTML = '';
+    seqtext.innerHTML = '';
 
     // remove handler
     util.removeEvent(info, 'click', calculate);
