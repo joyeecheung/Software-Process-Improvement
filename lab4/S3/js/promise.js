@@ -167,15 +167,15 @@
         try {
           if (value && (typeof value === 'object' ||
                         typeof value === 'function')) {
-            var then = val.then;
+            var then = value.then;
             if (typeof then === 'function') {  // thenable
-              then.call(val, function(nextValue) {
+              then.call(value, function(nextValue) {
                 start(i, nextValue);  // then until not thenable
               }, reject);
               return;
             }
           }
-          args[i] = val;  // replace with return values
+          args[i] = value;  // replace with return values
           if (--remaining === 0) {
             resolve(args);
           }

@@ -151,42 +151,33 @@
   };
 
   Promise.all = function() {
-    var toSlice;
-    if (arguments.length === 1 && isArray(arguments[0]))
-      toSlice = arguments[0];
-    else
-      toSlice = arguments;
-    var args = Array.prototype.slice.call(toSlice);
+    var args = Array.prototype.slice.call(arguments.length === 1 && isArray(arguments[0]) ? arguments[0] : arguments);
 
     return new Promise(function(resolve, reject) {
-      if (args.length === 0)
-        return resolve([]);  // empty promise
+      if (args.length === 0) return resolve([]);
       var remaining = args.length;
 
-      function start(i, value) {
+      function res(i, val) {
         try {
-          if (value && (typeof value === 'object' ||
-                        typeof value === 'function')) {
+          if (val && (typeof val === 'object' || typeof val === 'function')) {
             var then = val.then;
-            if (typeof then === 'function') {  // thenable
-              then.call(val, function(nextValue) {
-                start(i, nextValue);  // then until not thenable
+            if (typeof then === 'function') {
+              then.call(val, function(val) {
+                res(i, val)
               }, reject);
               return;
             }
           }
-          args[i] = val;  // replace with return values
+          args[i] = val;
           if (--remaining === 0) {
             resolve(args);
           }
-        } catch (e) {
-          reject(e);
+        } catch (ex) {
+          reject(ex);
         }
       }
-
-      // test all promises
       for (var i = 0; i < args.length; i++) {
-        start(i, args[i]);
+        res(i, args[i]);
       }
     });
   };
