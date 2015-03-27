@@ -8,7 +8,7 @@
   var info = d.getElementById('info-bar');
   var total = d.getElementById('total');
   var seqtext = d.getElementById('sequence');
-  var handleButton = ButtonHandler();  // for non-auto calls
+  var marks = {};  // for non-auto calls
 
   var numButtons = buttons.length;
   var AUTO = true;
@@ -58,7 +58,7 @@
       if (!util.hasClass(buttons[i], 'disabled')) return;
     }
     // attach event hanlder
-    util.addEvent(info, 'click', handleButton);
+    util.addEvent(info, 'click', calculate);
     util.removeClass(info, 'disabled');
   }
 
@@ -70,27 +70,38 @@
     return ret;
   }
 
-  function calculate(currentSum) {
+  // for manual calls
+  function calculate() {
+    for (var i in marks) {
+      if (marks[i] === null) return;
+    }
+
+    total.innerHTML = sum(marks);
+    util.removeEvent(info, 'click', calculate);
+    util.addClass(info, 'disabled');
+  }
+
+  // for manual calls
+  function handleButton(e) {
+    var currentSum = 0;
+
+    var button = e.currentTarget;
+
+    startPending(button);
+    var promise = util.ajax.get('/').then(function(number) {
+      stopPending(button, number);
+      util.removeEvent(button, handleButton);
+      marks[button.id] = number;
+    }).then(checkInfo);
+  }
+
+  // for auto calls
+  function autoCalculate(currentSum) {
     total.innerHTML = currentSum;
     util.addClass(info, 'disabled');
   }
 
-  function ButtonHandler() {
-    var currentSum = 0;
-
-    return function(e) {
-      var button = e.currentTarget;
-
-      if (button !== info) {
-        clickButton(button, currentSum).then(function(val) {
-          currentSum = val;
-        }).then(checkInfo);
-      } else {
-        Promise.resolve(currentSum).then(calculate);
-      }
-    }
-  }
-
+  // for auto calls
   function clickButton(button, currentSum, auto) {
     startPending(button, auto);
     return util.ajax.get('/').then(function(number) {
@@ -134,7 +145,7 @@
   function bubbleHandler(currentSum) {
     return randomBreak(5, "楼主异步调用战斗力感人, 目测不超过" + currentSum,
                        currentSum)
-           .then(calculate)
+           .then(autoCalculate)
            .then(function() {
               util.addEvent(apb, 'click', autoload);
               util.removeClass(apb, 'disabled');
