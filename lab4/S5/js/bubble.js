@@ -8,9 +8,11 @@
   var info = d.getElementById('info-bar');
   var total = d.getElementById('total');
   var seqtext = d.getElementById('sequence');
-  var marks = {};
+  var handleButton = ButtonHandler();  // for non-auto calls
+
   var numButtons = buttons.length;
   var AUTO = true;
+  var FAIL_RATE = 0.8;
 
   function startPending(button, auto) {
     // check if it is disabled
@@ -51,12 +53,12 @@
   }
 
   function checkInfo() {
-    // check the marks, see if there is anyone null
-    for (var i in marks) {
-      if (marks[i] === null) return;
+    // See if there is anyone without number
+    for (var i = 0; i < numButtons; ++i) {
+      if (!util.hasClass(buttons[i], 'disabled')) return;
     }
     // attach event hanlder
-    util.addEvent(info, 'click', calculate);
+    util.addEvent(info, 'click', handleButton);
     util.removeClass(info, 'disabled');
   }
 
@@ -70,40 +72,40 @@
 
   function calculate(currentSum) {
     total.innerHTML = currentSum;
-    util.removeEvent(info, 'click', calculate);
     util.addClass(info, 'disabled');
   }
 
-  function handleButton(e) {
-    var button = e.currentTarget;
+  function ButtonHandler() {
+    var currentSum = 0;
 
-    startPending(button);
-    var promise = util.ajax.get('/').then(function(number) {
-      stopPending(button, number);
-      util.removeEvent(button, handleButton);
-      marks[button.id] = number;
-      checkInfo();
-    });
+    return function(e) {
+      var button = e.currentTarget;
+
+      if (button !== info) {
+        clickButton(button, currentSum).then(function(val) {
+          currentSum = val;
+        }).then(checkInfo);
+      } else {
+        Promise.resolve(currentSum).then(calculate);
+      }
+    }
   }
 
-  function clickButton(i, currentSum) {
-    var button = buttons[i];
-
-    startPending(button, AUTO);
+  function clickButton(button, currentSum, auto) {
+    startPending(button, auto);
     return util.ajax.get('/').then(function(number) {
       stopPending(button, number);
-      marks[button.id] = number;
       return currentSum + parseInt(number);
     });
   }
 
   function randomBreak(i, message, currentSum) {
-    if (Math.random() > 0.99) {
+    if (Math.random() > FAIL_RATE) {
       return Promise.reject({message: message, currentSum: currentSum});
     } else {
       msgtext.innerHTML = message;
       if (i < 5)
-        return clickButton(i, currentSum);
+        return clickButton(buttons[i], currentSum, AUTO);
       else
         return Promise.resolve(currentSum);
     }
@@ -169,18 +171,33 @@
         );
     }
 
+    var negation = {
+      "这是个天大的秘密": "这不是个天大的秘密",
+      "我不知道": "我知道",
+      "你不知道": "你知道",
+      "他不知道": "他知道",
+      "才怪": "才不怪"
+    };
+
     promise.then(bubbleHandler)["catch"](function(reason) {
-      console.log(reason.message);
+      if (negation[reason.message]) {
+        msgtext.innerHTML = negation[reason.message];
+      } else {
+        msgtext.innerHTML = reason.message.replace("目测不超过", "目测超过");
+      }
+      util.addClass(msgtext, 'failed');
+      util.addEvent(apb, 'click', autoload);
+      util.removeClass(apb, 'disabled');
     })
   }
 
 
   function init(e, auto) {
-    marks = {};
     // remove sum
     total.innerHTML = '';
     seqtext.innerHTML = '';
     msgtext.innerHTML = '';
+    util.removeClass(msgtext, 'failed');
 
     // remove handler
     util.removeEvent(info, 'click', calculate);
@@ -197,7 +214,6 @@
         util.addEvent(buttons[i], 'click', handleButton);
 
       util.removeClass(buttons[i], 'disabled');
-      marks[buttons[i].id] = null;
     }
   }
 
