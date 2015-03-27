@@ -1,6 +1,5 @@
 /* Author: Joyee Cheung */
 /* Mail: joyeec9h3@gmail.com */
-/* Github Repo: https://github.com/joyeecheung/Software-Process-Improvement/tree/master/lab1; */
 
 html {
     font-family: sans-serif;
@@ -133,8 +132,9 @@ html {
     transition: all 0.6s ease;
 }
 
-#at-plus-container #info-bar.disabled {
+#at-plus-container:hover #info-bar.disabled {
    cursor: default;
+   background-color: rgba(0, 0, 10, .4);
 }
 
 #at-plus-container:hover #info-bar {
@@ -145,7 +145,7 @@ html {
     top: -10rem;
     left: -4rem;
 
-    background-color: rgba(0, 0, 10, .4);
+    background-color: rgba(48, 63, 159, 1);
     color: #2AD591;
     font-size: 2rem;
 
@@ -238,7 +238,7 @@ html {
     transition: all 0.6s ease;
 }
 
-#at-plus-container:hover .random {
+#at-plus-container:hover .random.show {
     width: 1rem;
     height: 1rem;
     border-radius: 100%;
@@ -248,11 +248,15 @@ html {
 
     font-size: 0.6rem;
 
-    transition: all 0.6s ease;
+    transition: all 0.2s ease;
 }
 
 #at-plus-container #control-ring .button,
 #at-plus-container #info-bar,
 #at-plus-container .apb {
     cursor: pointer;
+}
+
+#at-plus-container .apb.disabled {
+    cursor: default;
 }
