@@ -6,21 +6,18 @@
   var info = d.getElementById('info-bar');
   var total = d.getElementById('total');
   var marks = {};
+  var numButtons = buttons.length;
 
   function startPending(button) {
     // check if it is disabled
     if (!util.hasClass(button, 'disabled')) {
       // show ... in button
       var random = button.getElementsByClassName('random')[0];
-      if (random)
-        random.innerHTML = '...'
-      else {
-        random = util.createElement('span', '...', 'random');
-        button.appendChild(random);
-      }
+      random.innerHTML = '...'
+      util.addClass(random, 'show');
 
       // disable other buttons
-      for (var i = 0, len = buttons.length; i < len; ++i) {
+      for (var i = 0; i < numButtons; ++i) {
         if (buttons[i] !== button) {
           util.removeEvent(buttons[i], 'click', handleButton);
           util.addClass(buttons[i], 'disabled');
@@ -38,8 +35,9 @@
     util.addClass(button, 'disabled');
 
     // enable other buttons
-    for (var i = 0, len = buttons.length; i < len; ++i) {
-      if (buttons[i] !== button && !buttons[i].getElementsByClassName('random')[0]) {
+    for (var i = 0; i < numButtons; ++i) {
+      var rand = buttons[i].getElementsByClassName('random')[0];
+      if (buttons[i] !== button && !util.hasClass(rand, 'show')) {
         util.addEvent(buttons[i], 'click', handleButton);
         util.removeClass(buttons[i], 'disabled');
       }
@@ -66,6 +64,8 @@
 
   function calculate() {
     total.innerHTML = sum(marks);
+    util.removeEvent(info, 'click', calculate);
+    util.addClass(info, 'disabled');
   }
 
   function handleButton(e) {
@@ -90,11 +90,11 @@
     util.addClass(info, 'disabled');
 
     // attach handlers
-    for (var i = 0, len = buttons.length; i < len; ++i) {
+    for (var i = 0; i < numButtons; ++i) {
       // remove number
       var random = buttons[i].getElementsByClassName('random')[0];
-      if (random)
-        util.removeElement(random);
+      util.removeClass(random, 'show');
+
       util.addEvent(buttons[i], 'click', handleButton);
       util.removeClass(buttons[i], 'disabled');
       marks[buttons[i].id] = null;
