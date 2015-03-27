@@ -149,7 +149,7 @@ html {
     color: #2AD591;
     font-size: 2rem;
 
-    overflow: hidden;
+    overflow: visible;
 
     transition: all 0.6s ease;
 }
@@ -161,6 +161,23 @@ html {
 #at-plus-container:hover #sequence {
     margin: 2rem 0 0.5rem 0;
     padding: 0;
+    font-size: 1rem;
+    display: block;
+}
+
+#at-plus-container #message {
+    display: none;
+    color: transparent;
+}
+
+#at-plus-container:hover #message {
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    top: -2rem;
+
+    color: #2AD591;
+    
     font-size: 1rem;
     display: block;
 }

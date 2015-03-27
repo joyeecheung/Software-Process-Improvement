@@ -4,6 +4,7 @@
   var atplus = d.getElementById('at-plus-container');
   var apb = d.getElementsByClassName('apb')[0];
   var buttons = atplus.getElementsByClassName('button');
+  var msgtext = d.getElementById('message');
   var info = d.getElementById('info-bar');
   var total = d.getElementById('total');
   var seqtext = d.getElementById('sequence');
@@ -67,12 +68,8 @@
     return ret;
   }
 
-  function calculate() {
-    for (var i in marks) {
-      if (marks[i] === null) return;
-    }
-
-    total.innerHTML = sum(marks);
+  function calculate(currentSum) {
+    total.innerHTML = currentSum;
     util.removeEvent(info, 'click', calculate);
     util.addClass(info, 'disabled');
   }
@@ -100,6 +97,48 @@
     });
   }
 
+  function randomBreak(i, message, currentSum) {
+    if (Math.random() > 0.99) {
+      return Promise.reject({message: message, currentSum: currentSum});
+    } else {
+      msgtext.innerHTML = message;
+      if (i < 5)
+        return clickButton(i, currentSum);
+      else
+        return Promise.resolve(currentSum);
+    }
+  }
+
+  function aHandler(currentSum) {
+    return randomBreak(0, "这是个天大的秘密", currentSum);
+  }
+
+  function bHandler(currentSum) {
+    return randomBreak(1, "我不知道", currentSum);
+  }
+
+  function cHandler(currentSum) {
+    return randomBreak(2, "你不知道", currentSum);
+  }
+
+  function dHandler(currentSum) {
+    return randomBreak(3, "他不知道", currentSum);
+  }
+
+  function eHandler(currentSum) {
+    return randomBreak(4, "才怪", currentSum);
+  }
+
+  function bubbleHandler(currentSum) {
+    return randomBreak(5, "楼主异步调用战斗力感人, 目测不超过" + currentSum,
+                       currentSum)
+           .then(calculate)
+           .then(function() {
+              util.addEvent(apb, 'click', autoload);
+              util.removeClass(apb, 'disabled');
+            });
+  }
+
   function autoload(e) {
     init(e, AUTO);
     util.removeEvent(apb, 'click', autoload);  // stop racing
@@ -116,22 +155,23 @@
     var text = sequence.map(function(i){ return dict[i]; }).join(', ');
     seqtext.innerHTML = text;
 
+    var handlers = [aHandler, bHandler, cHandler, dHandler, eHandler];
+
     var promise;
     for (var i = 0; i < numButtons; ++i) {
-      promise = (typeof promise === 'undefined') ? clickButton(sequence[i], 0) :
+      promise = (typeof promise === 'undefined') ?  handlers[sequence[i]](0) :
         promise.then(
           (function(idx) {
             return function(currentSum) {
-              console.log(currentSum);
-              return clickButton(sequence[idx], currentSum);
+              return handlers[sequence[idx]](currentSum);
             }
           })(i)
         );
     }
-    promise.then(calculate).then(function() {
-      util.addEvent(apb, 'click', autoload);
-      util.removeClass(apb, 'disabled');
-    });
+
+    promise.then(bubbleHandler)["catch"](function(reason) {
+      console.log(reason.message);
+    })
   }
 
 
@@ -140,6 +180,7 @@
     // remove sum
     total.innerHTML = '';
     seqtext.innerHTML = '';
+    msgtext.innerHTML = '';
 
     // remove handler
     util.removeEvent(info, 'click', calculate);
