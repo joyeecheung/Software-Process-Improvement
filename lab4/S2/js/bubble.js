@@ -21,9 +21,8 @@
 
     // disable other buttons
     for (var i = 0; i < numButtons; ++i) {
+      util.removeEvent(buttons[i], 'click', handleButton);
       if (buttons[i] !== button) {
-        if (!auto)
-          util.removeEvent(buttons[i], 'click', handleButton);
         util.addClass(buttons[i], 'disabled');
       }
     }
@@ -140,8 +139,11 @@
       if (util.hasClass(random, 'show'))
         util.removeClass(random, 'show');
 
-      if (!auto)
+      if (!auto) {
         util.addEvent(buttons[i], 'click', handleButton);
+      } else {
+        util.removeEvent(buttons[i], 'click', handleButton);
+      }
 
       util.removeClass(buttons[i], 'disabled');
       marks[buttons[i].id] = null;
