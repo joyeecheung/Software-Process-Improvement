@@ -22,9 +22,8 @@
 
     // disable other buttons
     for (var i = 0; i < numButtons; ++i) {
+      util.removeEvent(buttons[i], 'click', handleButton);
       if (buttons[i] !== button) {
-        if (!auto)
-          util.removeEvent(buttons[i], 'click', handleButton);
         util.addClass(buttons[i], 'disabled');
       }
     }
@@ -105,28 +104,26 @@
     util.removeEvent(apb, 'click', autoload);  // stop racing
     util.addClass(apb, 'disabled');
 
-    var sequence = [];
+    var seq = [];
     for (i = 0; i < numButtons; ++i) {
-      sequence.push(i);
+      seq.push(i);
     }
     
     var dict = ['A', 'B', 'C', 'D', 'E'];
-    sequence = util.shuffle(sequence);
+    seq = util.shuffle(seq);
 
-    var text = sequence.map(function(i){ return dict[i]; }).join(', ');
+    var text = seq.map(function(i){ return dict[i]; }).join(', ');
     seqtext.innerHTML = text;
 
     var promise;
     for (var i = 0; i < numButtons; ++i) {
-      promise = (typeof promise === 'undefined') ? clickButton(sequence[i]) :
-        promise.then(
-          (function(idx) {
-            return function() {
-              return clickButton(sequence[idx]);
-            }
-          })(i)
-        )
+      if (typeof promise === 'undefined') {
+        promise = clickButton(seq[i]);
+      } else {
+        promise = promise.then(clickButton.bind(this, seq[i]));
+      }
     }
+
     promise.then(calculate).then(function() {
       util.addEvent(apb, 'click', autoload);
       util.removeClass(apb, 'disabled');
@@ -151,11 +148,14 @@
       if (util.hasClass(random, 'show'))
         util.removeClass(random, 'show');
 
-      if (!auto)
+      if (!auto) {
         util.addEvent(buttons[i], 'click', handleButton);
+      } else {
+        util.removeEvent(buttons[i], 'click', handleButton);
+      }
 
-      util.removeClass(buttons[i], 'disabled');
       marks[buttons[i].id] = null;
+      util.removeClass(buttons[i], 'disabled');
     }
   }
 
