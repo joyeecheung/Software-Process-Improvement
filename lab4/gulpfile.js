@@ -48,7 +48,7 @@ gulp.task('merge', function() {
 });
 
 gulp.task('server', function() {
-  return gulp.src(['./server.js', 'READEME.md']).pipe(gulp.dest('./dist'));
+  return gulp.src(['./server.js', 'README.md']).pipe(gulp.dest('./dist'));
 });
 
 gulp.task('default', ['copy', 'concat', 'merge', 'server']);
