@@ -8,20 +8,20 @@
   var marks = {};
   var numButtons = buttons.length;
 
-  function startPending(button) {
+  function startPending(button, auto) {
     // check if it is disabled
-    if (!util.hasClass(button, 'disabled')) {
-      // show ... in button
-      var random = button.getElementsByClassName('random')[0];
-      random.innerHTML = '...'
-      util.addClass(random, 'show');
+    if (util.hasClass(button, 'disabled'))
+      return;
+    // show ... in button
+    var random = button.getElementsByClassName('random')[0];
+    random.innerHTML = '...'
+    util.addClass(random, 'show');
 
-      // disable other buttons
-      for (var i = 0; i < numButtons; ++i) {
-        if (buttons[i] !== button) {
-          util.removeEvent(buttons[i], 'click', handleButton);
-          util.addClass(buttons[i], 'disabled');
-        }
+    // disable other buttons
+    for (var i = 0; i < numButtons; ++i) {
+      util.removeEvent(buttons[i], 'click', handleButton);
+      if (buttons[i] !== button) {
+        util.addClass(buttons[i], 'disabled');
       }
     }
   }

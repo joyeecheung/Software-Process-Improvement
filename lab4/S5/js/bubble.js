@@ -12,7 +12,7 @@
 
   var numButtons = buttons.length;
   var AUTO = true;
-  var FAIL_RATE = 0.8;
+  var FAIL_RATE = 0.3;
 
   function startPending(button, auto) {
     // check if it is disabled
@@ -110,7 +110,7 @@
   }
 
   function randomBreak(i, message, currentSum) {
-    if (Math.random() > FAIL_RATE) {
+    if (Math.random() < FAIL_RATE) {
       return Promise.reject({message: message, currentSum: currentSum});
     } else {
       msgtext.innerHTML = message;
