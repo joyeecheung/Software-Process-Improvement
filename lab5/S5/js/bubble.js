@@ -13,11 +13,21 @@
   var numButtons = buttons.length;
   var AUTO = true;
   var FAIL_RATE = 0.3;
+  var ABORT = 1, RANDOM_FAIL = 2;
+
+  function sum(obj) {
+    var ret = 0;
+    for (var i in obj) {
+      ret += parseInt(obj[i]);
+    }
+    return ret;
+  }
 
   function startPending(button, auto) {
     // check if it is disabled
     if (util.hasClass(button, 'disabled'))
       return;
+
     // show ... in button
     var random = button.getElementsByClassName('random')[0];
     random.innerHTML = '...'
@@ -61,14 +71,6 @@
     util.removeClass(info, 'disabled');
   }
 
-  function sum(obj) {
-    var ret = 0;
-    for (var i in obj) {
-      ret += parseInt(obj[i]);
-    }
-    return ret;
-  }
-
   // for manual calls
   function calculate() {
     for (var i in marks) {
@@ -82,16 +84,21 @@
 
   // for manual calls
   function handleButton(e) {
-    var currentSum = 0;
-
     var button = e.currentTarget;
-
-    startPending(button);
-    var promise = util.ajax.get('/').then(function(number) {
-      stopPending(button, number);
-      util.removeEvent(button, handleButton);
-      marks[button.id] = number;
-    }).then(checkInfo);
+    var promise = new Promise(function(resolve, reject) {
+      startPending(button);
+      util.ajax.get('/').then(function(number) {
+        resolve(number);
+      });
+      util.addEvent(atplus, 'mouseleave', function(e) {
+        reject('abort promise due to mouseleave');
+      });
+    }).then(function(number) {
+        stopPending(button, number);
+        util.removeEvent(button, handleButton);
+        marks[button.id] = number;
+        checkInfo();
+    });
   }
 
   // for auto calls
@@ -102,10 +109,21 @@
 
   // for auto calls
   function clickButton(button, currentSum, auto) {
-    startPending(button, auto);
-    return util.ajax.get('/').then(function(number) {
-      stopPending(button, number);
-      return currentSum + parseInt(number);
+    return new Promise(function(resolve, reject) {
+      startPending(button, auto);
+      util.ajax.get('/').then(function(number) {
+        resolve(number);
+      });
+      util.addEvent(atplus, 'mouseleave', function(e) {
+        reject({
+          message: 'abort promise due to mouseleave',
+          error: ABORT
+        });
+      });
+    }).then(function(number) {
+        stopPending(button, number, AUTO);
+        util.removeEvent(button, handleButton);
+        return currentSum + parseInt(number);
     });
   }
 
@@ -152,6 +170,13 @@
   }
 
   function errorHandler(reason) {
+    if (reason.error === ABORT) {
+      console.log(reason.message);
+      util.addEvent(apb, 'click', autoload);
+      util.removeClass(apb, 'disabled');
+      return;
+    }
+
     var negation = {
       "这是个天大的秘密": "这不是个天大的秘密",
       "我不知道": "我知道",
