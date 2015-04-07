@@ -1,269 +1,237 @@
-;
-(function(d) {
-  'use strict';
-  var atplus = d.getElementById('at-plus-container');
-  var apb = d.getElementsByClassName('apb')[0];
-  var buttons = atplus.getElementsByClassName('button');
-  var msgtext = d.getElementById('message');
-  var info = d.getElementById('info-bar');
-  var total = d.getElementById('total');
-  var seqtext = d.getElementById('sequence');
-  var marks = {};  // for non-auto calls
-
-  var numButtons = buttons.length;
-  var AUTO = true;
-  var FAIL_RATE = 0.3;
-  var ABORT = 1, RANDOM_FAIL = 2;
-
-  function sum(obj) {
-    var ret = 0;
-    for (var i in obj) {
-      ret += parseInt(obj[i]);
-    }
-    return ret;
-  }
-
-  function startPending(button, auto) {
-    // check if it is disabled
-    if (util.hasClass(button, 'disabled'))
-      return;
-
-    // show ... in button
-    var random = button.getElementsByClassName('random')[0];
-    random.innerHTML = '...'
-    util.addClass(random, 'show');
-
-    // disable other buttons
-    for (var i = 0; i < numButtons; ++i) {
-      util.removeEvent(buttons[i], 'click', handleButton);
-      if (buttons[i] !== button) {
-        util.addClass(buttons[i], 'disabled');
+(function() {
+  (function(d) {
+    'use strict';
+    var ABORT, AUTO, FAIL_RATE, RANDOM_FAIL, aHandler, apb, atplus, autoCalculate, autoload, bHandler, bubbleHandler, buttons, cHandler, calculate, checkInfo, clickButton, dHandler, eHandler, errorHandler, handleButton, info, init, marks, msgtext, numButtons, randomBreak, seqtext, startPending, stopPending, sum, total;
+    atplus = d.getElementById('at-plus-container');
+    apb = d.getElementsByClassName('apb')[0];
+    buttons = atplus.getElementsByClassName('button');
+    msgtext = d.getElementById('message');
+    info = d.getElementById('info-bar');
+    total = d.getElementById('total');
+    seqtext = d.getElementById('sequence');
+    marks = {};
+    numButtons = buttons.length;
+    AUTO = true;
+    FAIL_RATE = 0.3;
+    ABORT = 1;
+    RANDOM_FAIL = 2;
+    sum = function(obj) {
+      var i, ret;
+      ret = 0;
+      for (i in obj) {
+        ret += parseInt(obj[i]);
       }
-    }
-  }
-
-  function stopPending(button, number, auto) {
-    // show the number
-    var random = button.getElementsByClassName('random')[0];
-    random.innerHTML = number;
-
-    // disable this button
-    util.addClass(button, 'disabled');
-
-    // enable other buttons
-    for (var i = 0; i < numButtons; ++i) {
-      var rand = buttons[i].getElementsByClassName('random')[0];
-      if (buttons[i] !== button && !util.hasClass(rand, 'show')) {
-        if (!auto)
-          util.addEvent(buttons[i], 'click', handleButton);
-        util.removeClass(buttons[i], 'disabled');
+      return ret;
+    };
+    startPending = function(button, auto) {
+      var i, j, random, ref;
+      if (util.hasClass(button, 'disabled')) {
+        return;
       }
-    }
-  }
-
-  function checkInfo() {
-    // See if there is anyone without number
-    for (var i = 0; i < numButtons; ++i) {
-      if (!util.hasClass(buttons[i], 'disabled')) return;
-    }
-    // attach event hanlder
-    util.addEvent(info, 'click', calculate);
-    util.removeClass(info, 'disabled');
-  }
-
-  // for manual calls
-  function calculate() {
-    for (var i in marks) {
-      if (marks[i] === null) return;
-    }
-
-    total.innerHTML = sum(marks);
-    util.removeEvent(info, 'click', calculate);
-    util.addClass(info, 'disabled');
-  }
-
-  // for manual calls
-  function handleButton(e) {
-    var button = e.currentTarget;
-    var promise = new Promise(function(resolve, reject) {
-      startPending(button);
-      util.ajax.get('/').then(function(number) {
-        resolve(number);
-      });
-      util.addEvent(atplus, 'mouseleave', function(e) {
-        reject('abort promise due to mouseleave');
-      });
-    }).then(function(number) {
+      random = button.getElementsByClassName('random')[0];
+      random.innerHTML = '...';
+      util.addClass(random, 'show');
+      for (i = j = 0, ref = numButtons - 1; 0 <= ref ? j <= ref : j >= ref; i = 0 <= ref ? ++j : --j) {
+        util.removeEvent(buttons[i], 'click', handleButton);
+        if (buttons[i] !== button) {
+          util.addClass(buttons[i], 'disabled');
+        }
+      }
+    };
+    stopPending = function(button, number, auto) {
+      var i, j, rand, random, ref;
+      random = button.getElementsByClassName('random')[0];
+      random.innerHTML = number;
+      util.addClass(button, 'disabled');
+      for (i = j = 0, ref = numButtons - 1; 0 <= ref ? j <= ref : j >= ref; i = 0 <= ref ? ++j : --j) {
+        rand = buttons[i].getElementsByClassName('random')[0];
+        if (buttons[i] !== button && !util.hasClass(rand, 'show')) {
+          if (!auto) {
+            util.addEvent(buttons[i], 'click', handleButton);
+          }
+          util.removeClass(buttons[i], 'disabled');
+        }
+      }
+    };
+    checkInfo = function() {
+      var i, j, ref;
+      for (i = j = 0, ref = numButtons - 1; 0 <= ref ? j <= ref : j >= ref; i = 0 <= ref ? ++j : --j) {
+        if (!util.hasClass(buttons[i], 'disabled')) {
+          return;
+        }
+      }
+      util.addEvent(info, 'click', calculate);
+      util.removeClass(info, 'disabled');
+    };
+    calculate = function() {
+      total.innerHTML = sum(marks);
+      util.removeEvent(info, 'click', calculate);
+      util.addClass(info, 'disabled');
+    };
+    handleButton = function(e) {
+      var button, promise;
+      button = e.currentTarget;
+      promise = new Promise(function(resolve, reject) {
+        startPending(button);
+        util.ajax.get('/').then(function(number) {
+          resolve(number);
+        });
+        util.addEvent(atplus, 'mouseleave', function(e) {
+          reject('abort promise due to mouseleave');
+        });
+      }).then(function(number) {
         stopPending(button, number);
         util.removeEvent(button, handleButton);
         marks[button.id] = number;
         checkInfo();
-    });
-  }
-
-  // for auto calls
-  function autoCalculate(currentSum) {
-    total.innerHTML = currentSum;
-    util.addClass(info, 'disabled');
-  }
-
-  // for auto calls
-  function clickButton(button, currentSum, auto) {
-    return new Promise(function(resolve, reject) {
-      startPending(button, auto);
-      util.ajax.get('/').then(function(number) {
-        resolve(number);
       });
-      util.addEvent(atplus, 'mouseleave', function(e) {
-        reject({
-          message: 'abort promise due to mouseleave',
-          error: ABORT
+    };
+    autoCalculate = function(currentSum) {
+      total.innerHTML = currentSum;
+      util.addClass(info, 'disabled');
+    };
+    clickButton = function(button, currentSum, auto) {
+      return new Promise(function(resolve, reject) {
+        startPending(button, auto);
+        util.ajax.get('/').then(function(number) {
+          resolve(number);
         });
-      });
-    }).then(function(number) {
+        util.addEvent(atplus, 'mouseleave', function(e) {
+          reject({
+            message: 'abort promise due to mouseleave',
+            error: ABORT
+          });
+        });
+      }).then(function(number) {
         stopPending(button, number, AUTO);
         util.removeEvent(button, handleButton);
         return currentSum + parseInt(number);
-    });
-  }
-
-  function randomBreak(i, message, currentSum) {
-    if (Math.random() < FAIL_RATE) {
-      return Promise.reject({message: message, currentSum: currentSum});
-    } else {
-      msgtext.innerHTML = message;
-      if (i < 5)
-        return clickButton(buttons[i], currentSum, AUTO);
-      else
-        return Promise.resolve(currentSum);
-    }
-  }
-
-  function aHandler(currentSum) {
-    return randomBreak(0, "这是个天大的秘密", currentSum);
-  }
-
-  function bHandler(currentSum) {
-    return randomBreak(1, "我不知道", currentSum);
-  }
-
-  function cHandler(currentSum) {
-    return randomBreak(2, "你不知道", currentSum);
-  }
-
-  function dHandler(currentSum) {
-    return randomBreak(3, "他不知道", currentSum);
-  }
-
-  function eHandler(currentSum) {
-    return randomBreak(4, "才怪", currentSum);
-  }
-
-  function bubbleHandler(currentSum) {
-    return randomBreak(5, "楼主异步调用战斗力感人, 目测不超过" + currentSum,
-                       currentSum)
-           .then(autoCalculate)
-           .then(function() {
-              util.addEvent(apb, 'click', autoload);
-              util.removeClass(apb, 'disabled');
-            });
-  }
-
-  function errorHandler(reason) {
-    if (reason.error === ABORT) {
-      console.log(reason.message);
+      });
+    };
+    randomBreak = function(i, message, currentSum) {
+      if (Math.random() < FAIL_RATE) {
+        return Promise.reject({
+          message: message,
+          currentSum: currentSum
+        });
+      } else {
+        msgtext.innerHTML = message;
+        if (i < 5) {
+          return clickButton(buttons[i], currentSum, AUTO);
+        } else {
+          return Promise.resolve(currentSum);
+        }
+      }
+    };
+    aHandler = function(currentSum) {
+      return randomBreak(0, '这是个天大的秘密', currentSum);
+    };
+    bHandler = function(currentSum) {
+      return randomBreak(1, '我不知道', currentSum);
+    };
+    cHandler = function(currentSum) {
+      return randomBreak(2, '你不知道', currentSum);
+    };
+    dHandler = function(currentSum) {
+      return randomBreak(3, '他不知道', currentSum);
+    };
+    eHandler = function(currentSum) {
+      return randomBreak(4, '才怪', currentSum);
+    };
+    bubbleHandler = function(currentSum) {
+      return randomBreak(5, '楼主异步调用战斗力感人, 目测不超过' + currentSum, currentSum).then(autoCalculate).then(function() {
+        util.addEvent(apb, 'click', autoload);
+        util.removeClass(apb, 'disabled');
+      });
+    };
+    errorHandler = function(reason) {
+      var negation;
+      if (reason.error === ABORT) {
+        console.log(reason.message);
+        util.addEvent(apb, 'click', autoload);
+        util.removeClass(apb, 'disabled');
+        return;
+      }
+      negation = {
+        '这是个天大的秘密': '这不是个天大的秘密',
+        '我不知道': '我知道',
+        '你不知道': '你知道',
+        '他不知道': '他知道',
+        '才怪': '才不怪'
+      };
+      if (negation[reason.message]) {
+        msgtext.innerHTML = negation[reason.message];
+      } else {
+        msgtext.innerHTML = reason.message.replace('目测不超过', '目测超过');
+        autoCalculate(reason.currentSum);
+      }
+      util.addClass(msgtext, 'failed');
       util.addEvent(apb, 'click', autoload);
       util.removeClass(apb, 'disabled');
-      return;
-    }
-
-    var negation = {
-      "这是个天大的秘密": "这不是个天大的秘密",
-      "我不知道": "我知道",
-      "你不知道": "你知道",
-      "他不知道": "他知道",
-      "才怪": "才不怪"
+      return reason.currentSum;
     };
-
-    if (negation[reason.message]) {
-      msgtext.innerHTML = negation[reason.message];
-    } else {
-      msgtext.innerHTML = reason.message.replace("目测不超过", "目测超过");
-      autoCalculate(reason.currentSum);
-    }
-
-    util.addClass(msgtext, 'failed');
-    util.addEvent(apb, 'click', autoload);
-    util.removeClass(apb, 'disabled');
-
-    return reason.currentSum;
-  }
-
-  function autoload(e) {
-    init(e, AUTO);
-    util.removeEvent(apb, 'click', autoload);  // stop racing
-    util.addClass(apb, 'disabled');
-
-    var seq = [];
-    for (i = 0; i < numButtons; ++i) {
-      seq.push(i);
-    }
-    
-    var dict = ['A', 'B', 'C', 'D', 'E'];
-    seq = util.shuffle(seq);
-
-    var text = seq.map(function(i){ return dict[i]; }).join(', ');
-    seqtext.innerHTML = text;
-
-    var handlers = [aHandler, bHandler, cHandler, dHandler, eHandler];
-
-    var promise;
-    for (var i = 0; i < numButtons; ++i) {
-      if (typeof promise === 'undefined') {
-        promise = handlers[seq[i]](0);
-      } else {
-        promise = promise.then(handlers[seq[i]]);
+    autoload = function(e) {
+      var dict, handlers, i, j, promise, ref, seq, text;
+      init(e, AUTO);
+      util.removeEvent(apb, 'click', autoload);
+      util.addClass(apb, 'disabled');
+      seq = util.shuffle((function() {
+        var j, ref, results;
+        results = [];
+        for (i = j = 0, ref = numButtons - 1; 0 <= ref ? j <= ref : j >= ref; i = 0 <= ref ? ++j : --j) {
+          results.push(i);
+        }
+        return results;
+      })());
+      dict = ['A', 'B', 'C', 'D', 'E'];
+      text = ((function() {
+        var j, len, results;
+        results = [];
+        for (j = 0, len = seq.length; j < len; j++) {
+          i = seq[j];
+          results.push(dict[i]);
+        }
+        return results;
+      })()).join(', ');
+      seqtext.innerHTML = text;
+      handlers = [aHandler, bHandler, cHandler, dHandler, eHandler];
+      promise = void 0;
+      for (i = j = 0, ref = numButtons; 0 <= ref ? j <= ref : j >= ref; i = 0 <= ref ? ++j : --j) {
+        if (typeof promise === 'undefined') {
+          promise = handlers[seq[i]](0);
+        } else {
+          promise = promise.then(handlers[seq[i]]);
+        }
       }
-    }
-
-    promise.then(bubbleHandler)["catch"](errorHandler);
-  }
-
-  function init(e, auto) {
-    if (!auto)
-      marks = {};
-
-    // remove sum
-    total.innerHTML = '';
-    seqtext.innerHTML = '';
-    msgtext.innerHTML = '';
-    util.removeClass(msgtext, 'failed');
-
-    // remove handler
-    util.removeEvent(info, 'click', calculate);
-    util.addClass(info, 'disabled');
-
-    // attach handlers
-    for (var i = 0; i < numButtons; ++i) {
-      // remove number
-      var random = buttons[i].getElementsByClassName('random')[0];
-      if (util.hasClass(random, 'show'))
-        util.removeClass(random, 'show');
-
+      promise.then(bubbleHandler)['catch'](errorHandler);
+    };
+    init = function(e, auto) {
+      var i, j, random, ref;
       if (!auto) {
-        util.addEvent(buttons[i], 'click', handleButton);
-        marks[buttons[i].id] = null;
-      } else {
-        util.removeEvent(buttons[i], 'click', handleButton);
+        marks = {};
       }
+      total.innerHTML = '';
+      seqtext.innerHTML = '';
+      msgtext.innerHTML = '';
+      util.removeClass(msgtext, 'failed');
+      util.removeEvent(info, 'click', calculate);
+      util.addClass(info, 'disabled');
+      for (i = j = 0, ref = numButtons - 1; 0 <= ref ? j <= ref : j >= ref; i = 0 <= ref ? ++j : --j) {
+        random = buttons[i].getElementsByClassName('random')[0];
+        util.removeClass(random, 'show');
+        if (!auto) {
+          util.addEvent(buttons[i], 'click', handleButton);
+          marks[buttons[i].id] = null;
+        } else {
+          util.removeEvent(buttons[i], 'click', handleButton);
+        }
+        util.removeClass(buttons[i], 'disabled');
+      }
+    };
+    return util.addEvent(window, 'load', function() {
+      util.addEvent(atplus, 'mouseenter', init);
+      util.addEvent(apb, 'click', autoload);
+    });
+  })(document);
 
-      util.removeClass(buttons[i], 'disabled');
-    }
-  }
-
-  util.addEvent(window, 'load', function() {
-    util.addEvent(atplus, 'mouseenter', init);
-    util.addEvent(apb, 'click', autoload);
-  });
-
-}(document));
+}).call(this);
