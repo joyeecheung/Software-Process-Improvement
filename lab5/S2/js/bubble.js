@@ -66,8 +66,6 @@
     util.removeClass(info, 'disabled');
   }
 
-
-
   function calculate() {
     total.innerHTML = sum(marks);
     util.removeEvent(info, 'click', calculate);
