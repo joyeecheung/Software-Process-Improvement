@@ -1,3 +1,5 @@
 node_modules
 **/ajax.js
 **/util.js
+**/ajax.coffee
+**/util.coffee

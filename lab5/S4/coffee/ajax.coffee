@@ -22,7 +22,7 @@ this.util.ajax = do ->
         return
       client.send url
       return
-)
+    )
 
   {
     'get': (url, args) ->
@@ -33,5 +33,4 @@ this.util.ajax = do ->
       core 'PUT', url, args
     'delete': (url, args) ->
       core 'DELETE', url, args
-
   }
