@@ -8,10 +8,19 @@
   var marks = {};
   var numButtons = buttons.length;
 
-  function startPending(button, auto) {
+  function sum(obj) {
+    var ret = 0;
+    for (var i in obj) {
+      ret += parseInt(obj[i]);
+    }
+    return ret;
+  }
+
+  function startPending(button) {
     // check if it is disabled
     if (util.hasClass(button, 'disabled'))
       return;
+
     // show ... in button
     var random = button.getElementsByClassName('random')[0];
     random.innerHTML = '...'
@@ -54,14 +63,6 @@
     util.removeClass(info, 'disabled');
   }
 
-  function sum(obj) {
-    var ret = 0;
-    for (var i in obj) {
-      ret += parseInt(obj[i]);
-    }
-    return ret;
-  }
-
   function calculate() {
     total.innerHTML = sum(marks);
     util.removeEvent(info, 'click', calculate);
@@ -70,13 +71,19 @@
 
   function handleButton(e) {
     var button = e.currentTarget;
-
-    startPending(button);
-    var promise = util.ajax.get('/').then(function(number) {
-      stopPending(button, number);
-      util.removeEvent(button, handleButton);
-      marks[button.id] = number;
-      checkInfo();
+    var promise = new Promise(function(resolve, reject) {
+      startPending(button);
+      util.ajax.get('/').then(function(number) {
+        resolve(number);
+      });
+      util.addEvent(atplus, 'mouseleave', function(e) {
+        reject('abort promise due to mouseleave');
+      });
+    }).then(function(number) {
+        stopPending(button, number);
+        util.removeEvent(button, handleButton);
+        marks[button.id] = number;
+        checkInfo();
     });
   }
 

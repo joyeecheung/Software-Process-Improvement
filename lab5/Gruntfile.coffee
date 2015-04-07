@@ -1,8 +1,4 @@
-# concat
-# compile
-# replace
-# move
-# watch and serve
+# TODO: concat and replace with index.js
 
 module.exports = (grunt) ->
   require('load-grunt-tasks')(grunt)
