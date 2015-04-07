@@ -11,10 +11,19 @@
   var numButtons = buttons.length;
   var AUTO = true;
 
+  function sum(obj) {
+    var ret = 0;
+    for (var i in obj) {
+      ret += parseInt(obj[i]);
+    }
+    return ret;
+  }
+
   function startPending(button, auto) {
     // check if it is disabled
     if (util.hasClass(button, 'disabled'))
       return;
+
     // show ... in button
     var random = button.getElementsByClassName('random')[0];
     random.innerHTML = '...'
@@ -58,14 +67,6 @@
     util.removeClass(info, 'disabled');
   }
 
-  function sum(obj) {
-    var ret = 0;
-    for (var i in obj) {
-      ret += parseInt(obj[i]);
-    }
-    return ret;
-  }
-
   function calculate() {
     for (var i in marks) {
       if (marks[i] === null) return;
@@ -78,24 +79,38 @@
 
   function handleButton(e) {
     var button = e.currentTarget;
-
-    startPending(button);
-    var promise = util.ajax.get('/').then(function(number) {
-      stopPending(button, number);
-      util.removeEvent(button, handleButton);
-      marks[button.id] = number;
-      checkInfo();
+    var promise = new Promise(function(resolve, reject) {
+      startPending(button);
+      util.ajax.get('/').then(function(number) {
+        resolve(number);
+      });
+      util.addEvent(atplus, 'mouseleave', function(e) {
+        reject('abort promise due to mouseleave');
+      });
+    }).then(function(number) {
+        stopPending(button, number);
+        util.removeEvent(button, handleButton);
+        marks[button.id] = number;
+        checkInfo();
     });
   }
 
   function clickButton(i) {
+    console.log(i);
     var button = buttons[i];
-
-    startPending(button, AUTO);
-    return util.ajax.get('/').then(function(number) {
-      stopPending(button, number, AUTO);
-      marks[button.id] = number;
-      return i++;
+    return new Promise(function(resolve, reject) {
+      startPending(button, AUTO);
+      util.ajax.get('/').then(function(number) {
+        resolve(number);
+      });
+      util.addEvent(atplus, 'mouseleave', function(e) {
+        reject('abort promise due to mouseleave');
+      });
+    }).then(function(number) {
+        stopPending(button, number, AUTO);
+        util.removeEvent(button, handleButton);
+        marks[button.id] = number;
+        return i++;
     });
   }
 
@@ -108,10 +123,9 @@
     for (i = 0; i < numButtons; ++i) {
       seq.push(i);
     }
-    
-    var dict = ['A', 'B', 'C', 'D', 'E'];
     seq = util.shuffle(seq);
 
+    var dict = ['A', 'B', 'C', 'D', 'E'];
     var text = seq.map(function(i){ return dict[i]; }).join(', ');
     seqtext.innerHTML = text;
 
@@ -124,7 +138,12 @@
       }
     }
 
+    // finish up
     promise.then(calculate).then(function() {
+      util.addEvent(apb, 'click', autoload);
+      util.removeClass(apb, 'disabled');
+    }, function() {
+      console.log('Promise aborted due to mouseleave');
       util.addEvent(apb, 'click', autoload);
       util.removeClass(apb, 'disabled');
     });
