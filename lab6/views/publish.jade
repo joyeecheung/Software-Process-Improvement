@@ -1,0 +1,10 @@
+extends layout
+
+block content
+  div.container-fluid
+    div.row
+      div.col-sm-8.col-md-8.col-md-offset-2
+        h1.submit-title 发布作业
+        form(class='form-submit', action='/submit', method='POST')
+          textarea(name='content')
+          button(class='btn btn-lg btn-primary', type='submit') 提交

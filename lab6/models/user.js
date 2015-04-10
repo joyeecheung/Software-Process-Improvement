@@ -1,11 +1,12 @@
 
 var mongoose = require('mongoose');
 
-module.exports = mongoose.model('User',{
+module.exports = mongoose.model('User', {
 	id: String,
 	username: String,
 	password: String,
 	email: String,
 	firstName: String,
-	lastName: String
+	lastName: String,
+  course: [Schema.Types.ObjectId]
 });
