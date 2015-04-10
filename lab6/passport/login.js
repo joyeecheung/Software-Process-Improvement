@@ -12,12 +12,12 @@ module.exports = function(passport) {
     // check in mongo if a user with username exists or not
     User.findOne({
       'username': username
-    }, handleLogin);
+    }).exec().then(handleLogin, function(err) {
+      console.log('Error in Login: ' + err);
+      return done(err);
+    });
 
-    function handleLogin(err, user) {
-      // In case of any error, return using the done method
-      if (err)
-        return done(err);
+    function handleLogin(user) {
       // Username does not exist, log the error and redirect back
       if (!user) {
         console.log('User Not Found with username ' + username);
