@@ -8,17 +8,17 @@ exports.get = function(app, template) {
     if (!req.user.isTeacher) {
       User.findOne({
         username: req.user.username
-      }).deepPopulate('courses.requirements.homeworks')
+      }).lean().deepPopulate('courses.requirements.homeworks.student')
       .exec(function(err, user) {
         if (err) throw err;
 
         user.courses.forEach(function(c) {
           c.requirements.forEach(function(r) {
-            console.log("==============")
-            console.log(r.homeworks);
+            console.log(r);
             r.homeworks = r.homeworks.filter(function(h) {
-              return h.student === user._id
+              return h.student.username === user.username
             });
+            console.log(r);
           });
         });
 
