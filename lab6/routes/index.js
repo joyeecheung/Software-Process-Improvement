@@ -15,6 +15,13 @@ function isAuthenticated(req, res, next) {
   res.redirect('/');
 }
 
+function isTeacher(req, res, next) {
+  if(req.user.isTeacher)
+    return next();
+
+  res.redirect('/home');
+}
+
 module.exports = function(app, passport) {
 
   /* GET login page. */
@@ -56,7 +63,7 @@ module.exports = function(app, passport) {
   router.get('/home', isAuthenticated, list.get(app, 'home'));
 
   /* GET Home Page */
-  router.get('/publish/:id', isAuthenticated, publish.get(app, 'publish'));
+  router.get('/publish/:id', isAuthenticated, isTeacher, publish.get(app, 'publish'));
 
   return router;
 }
