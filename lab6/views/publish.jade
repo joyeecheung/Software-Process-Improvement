@@ -1,7 +1,7 @@
 extends homework-layout
 
 block main
-  if !error
+  if !error & !ended
     h1.submit-title 发布作业
     - var action = create ? 'new' : requirement._id;
     form(class='form-submit', action='/publish/' + action, method='POST')
@@ -41,3 +41,10 @@ block main
 
       .form-group
         button(class='btn btn-lg btn-primary', type='submit') 提交
+
+  if ended
+    +info({level: 'success', text: "本作业已经截止提交"})
+    h3="课程：" + requirement.course.name
+    h4=requirement.name
+    hr
+    p=requirement.content

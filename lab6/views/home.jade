@@ -4,7 +4,6 @@ block main
   each course in courses
     .course
       h3=course.name
-
     .requirement
       each requirement in course.requirements
         hr
@@ -25,7 +24,11 @@ block main
         else
           if requirement.homeworks.length === 0
             p.homework
-              a.btn.btn-info(href="/submit/new/?requirement="+requirement._id) 提交
+              - var now = new Date()
+              if requirement.deadline < now
+                +info("已经截止提交")
+              else
+                a.btn.btn-info(href="/submit/new/?requirement="+requirement._id) 提交
           else
             each homework in requirement.homeworks
               p.homework
