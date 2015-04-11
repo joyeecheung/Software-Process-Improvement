@@ -2,17 +2,29 @@ extends layout
 
 block content
   nav.navbar.navbar-default
-    div.container-fluid
-      div.navbar-header
+    .container-fluid
+      .navbar-header
         a.navbar-brand(href="/home") My Homework
       
       div.collapse.navbar-collapse
-        div.nav.navbar-nav.navbar-right
+        if user.isTeacher
+          ul.nav.nav-pills.navbar-nav.navbar-left
+            li(role="presentation")
+              a(href="/publish/new") 发布新作业
+
+        .nav.navbar-nav.navbar-right
           p.navbar-text
             =user.name
           a.btn.btn-default.navbar-btn(type="button", href="/signout") 登出
 
-  div.container-fluid
-    div.row
-      div.col-sm-8.col-md-8.col-md-offset-2
+  .container-fluid
+    .row
+      .col-sm-8.col-md-8.col-md-offset-2
+
+      if message && message.length !== 0
+        div.alert.alert-warning#message(role="alert")
+          p.text-center.error-message #{message}
+
+    .row
+      .col-sm-8.col-md-8.col-md-offset-2
         block main

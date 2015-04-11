@@ -20,7 +20,7 @@ var homeworkSchema = new Schema({requirement: {type: Schema.Types.ObjectId,ref: 
 homeworkSchema.plugin(deepPopulate);
 Homework = mongoose.model('Homework', homeworkSchema);
 
-var r = new Requirement({Deadline: new Date().setMonth(5), content: "用Express写一个作业管理系统", name: "一个作业管理系统"})
+var r = new Requirement({deadline: new Date().setMonth(5), content: "用Express写一个作业管理系统", name: "一个作业管理系统"})
 var c = new Course({name: '软件过程改进', requirements:[r._id]});
 r.course = c._id;
 var h = new Homework({requirement: r, content:"老师我没时间写啊啊啊"})

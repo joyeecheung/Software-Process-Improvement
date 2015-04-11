@@ -62,8 +62,10 @@ module.exports = function(app, passport) {
   /* GET Home Page */
   router.get('/home', isAuthenticated, list.get(app, 'home'));
 
-  /* GET Home Page */
+  /* GET publish Page */
   router.get('/publish/:id', isAuthenticated, isTeacher, publish.get(app, 'publish'));
+  /* POST publish Page */
+  router.post('/publish/:id', isAuthenticated, isTeacher, publish.post(app, 'publish'));
 
   return router;
 }

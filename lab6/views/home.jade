@@ -8,6 +8,8 @@ block main
     .requirement
       each requirement in course.requirements
         h4=requirement.name
+        p.pull-right
+          a.requirement-change.btn.btn-info.btn-xs(href="/publish/"+requirement._id) 修改
         p=requirement.content
 
         if user.isTeacher
@@ -15,7 +17,7 @@ block main
             each homework in requirement.homeworks
               tr
                 td=homework.student.name
-                td
+                td.text-right
                   a.btn.btn-info.btn-xs(href="/grade/"+homework._id) 批改
         else
           if requirement.homeworks.length === 0

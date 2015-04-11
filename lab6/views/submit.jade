@@ -4,7 +4,8 @@ block main
   h1.submit-title 提交作业
   form(class='form-submit', action='/submit', method='POST')
     if ended
-      div.alert.alert-warning(role="alert") 已经截止
+      div.alert.alert-warning(role="alert")
+        p 已经截止
       if homework
         p homework.content
       else
