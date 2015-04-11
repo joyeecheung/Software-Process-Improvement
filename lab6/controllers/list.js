@@ -28,8 +28,8 @@ exports.get = function(app, template) {
         });
       });
     } else {
-      Course.find()
-      .deepPopulate('requirements.homeworks')
+      Course.find().lean()
+      .deepPopulate('requirements.homeworks.student')
       .exec(function(err, courses) {
         if (err) throw err;
         res.render(template, {

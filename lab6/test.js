@@ -20,42 +20,29 @@ var homeworkSchema = new Schema({requirement: {type: Schema.Types.ObjectId,ref: 
 homeworkSchema.plugin(deepPopulate);
 Homework = mongoose.model('Homework', homeworkSchema);
 
-var r = new Requirement({Deadline: new Date().setMonth(5), content: "hey", name: "SPI"})
-var c = new Course({name: 'yoyo', requirements:[r._id]});
+var r = new Requirement({Deadline: new Date().setMonth(5), content: "用Express写一个作业管理系统", name: "一个作业管理系统"})
+var c = new Course({name: '软件过程改进', requirements:[r._id]});
 r.course = c._id;
-var h = new Homework({requirement: r, content:"some thing"})
-r.save(function(err) {
-  c.save(function(err){
-    h.save(function(err) {
+var h = new Homework({requirement: r, content:"老师我没时间写啊啊啊"})
 
+r.save(function(err) {c.save(function(err){h.save(function(err) {});});});
+
+User.findOne({username: "test"}, function(err, user) {
+  user.update({$set: {courses: [c._id]}}, function(err) {
+    Homework.update({_id: h._id}, {$set: {student: user._id}}, function(err) {
+      Requirement.update({_id: r._id},{$set: {homeworks: [h._id]}}, function(){
+      })
     });
   });
 });
 
-User.update(
-  {username: "test"},
-  { $set: {courses: [c._id]} },
-  function(err) {
-    Homework.update(
-      {_id: h._id},
-      {$set: {student: user._id}},
-      function(err) {
-        Requirement.update(
-          {_id: r._id},
-          {$set: {homeworks: [h._id]}},
-          function(){}
-        )
-      }
-    });
-  });
-})
-
 var u;
-User.findOne({username: "test"}).exec(function(err, user) {
-  user.deepPopulate('courses.requirements.homeworks', function(err, user) {
-    })
+User.findOne({username: "test"}, function(err, user) {
+  user.deepPopulate('courses.requirements.homeworks', function() {
     u = user;
-  });
+  })
+});
+
 });
 
 Course.find().deepPopulate('requirements.homeworks.student').exec(function(err, user) {

@@ -11,11 +11,12 @@ block main
         p=requirement.content
 
         if user.isTeacher
-          each homework in requirement.homeworks
-            dl.homework
-              dt.homework-student homework.student.name
-              dd.homework-link
-                a.btn.btn-info(href="/grade/"+homework._id) 批改
+          table.table.table-striped
+            each homework in requirement.homeworks
+              tr
+                td=homework.student.name
+                td
+                  a.btn.btn-info.btn-xs(href="/grade/"+homework._id) 批改
         else
           if requirement.homeworks.length === 0
             p.homework
