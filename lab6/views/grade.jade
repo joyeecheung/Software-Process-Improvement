@@ -1,13 +1,24 @@
 extends homework-layout
+include info
 
 block main
+  h3=homework.requirement.course.name
+  h3 作业要求
+  h4=homework.requirement.name
+  p=homework.requirement.content
   if !ended
-    div.alert.alert-warning(role="alert") 尚未到达截止日期
-  p.homework-student homework.student.name
-  p.homework-content homework.content
-  form(class='form-submit', action='/grade', method='POST')
-    input.hidden(name="homework", value=homework._id)
-    label
-      ="分数"
-      input(type="number", name="grade")
-    button(class='btn btn-lg btn-primary', type='submit') 提交
+    +info("尚未到达截止日期")
+  hr
+  h4 提交内容
+  p.homework-student="学生：" + homework.student.name
+  p.homework-content=homework.content
+  form(class='form-submit', action='/grade/'+homework._id, method='POST')
+    .form-group
+      label
+        ="分数"
+        if homework.grade
+          input.form-control(type="number", name="grade" value=homework.grade)
+        else
+          input.form-control(type="number", name="grade")
+    .form-group
+      button(class='btn btn-lg btn-primary', type='submit') 提交

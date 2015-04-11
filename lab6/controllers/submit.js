@@ -24,13 +24,17 @@ exports.get = function(app, template) {
       .findOne({_id: req.params.id})
       .deepPopulate('requirement.course')
       .exec(function(err, homework) {
-        console.log(homework.requirement.deadline < new Date());
+        console.log(req.query.success);
         res.render(template, {
           user: req.user,
           homework: homework,
           create: false,
           ended: homework.requirement.deadline < new Date(),
-          requirement: homework.requirement
+          requirement: homework.requirement,
+          message: req.query.success ? {
+            level: 'success',
+            text: '提交成功！'
+          } : undefined
         });
       });
     }
@@ -65,7 +69,7 @@ exports.post = function(app, template) {
             throw err;
           }
 
-          res.redirect('/submit/' + homework._id);
+          res.redirect('/submit/' + homework._id + '?success=true');
         });
       });
     } else {
@@ -76,7 +80,7 @@ exports.post = function(app, template) {
           console.log('Error in Saving homework: ' + err);
           throw err;
         }
-        res.redirect('/submit/' + homework._id);
+        res.redirect('/submit/' + homework._id + '?success=true');
       });
     }
   }

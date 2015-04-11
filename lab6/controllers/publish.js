@@ -38,7 +38,12 @@ exports.get = function(app, template) {
           courses: [],
           create: false,
           requirement: requirement,
-          dateFormat: dateFormat
+          dateFormat: dateFormat,
+          ended: requirement.deadline < new Date(),
+          message: req.query.success ? {
+            level: 'success',
+            text: '发布成功！'
+          } : undefined
         });
       });
     }
@@ -76,7 +81,7 @@ exports.post = function(app, template) {
             throw err;
           }
 
-          res.redirect('/publish/' + requirement._id);
+          res.redirect('/publish/' + requirement._id + '?success=true');
         });
         
       });
@@ -88,7 +93,7 @@ exports.post = function(app, template) {
           console.log('Error in Saving requirement: ' + err);
           throw err;
         }
-        res.redirect('/publish/' + requirement._id);
+        res.redirect('/publish/' + requirement._id + '?success=true');
       });
     }
   }

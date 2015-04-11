@@ -79,5 +79,10 @@ module.exports = function(app, passport) {
   /* POST submit Page */
   router.post('/submit/:id', isAuthenticated, isStudent, submit.post(app, 'submit'));
 
+  /* GET grade Page */
+  router.get('/grade/:id', isAuthenticated, isTeacher, grade.get(app, 'grade'));
+  /* POST grade Page */
+  router.post('/grade/:id', isAuthenticated, isTeacher, grade.post(app, 'grade'));
+
   return router;
 }

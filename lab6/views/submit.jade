@@ -1,25 +1,25 @@
 extends homework-layout
+include info
 
 block main
   h1.submit-title 提交作业
   if ended
-    div.alert.alert-warning(role="alert")
-      p 已经截止，你提交的版本如下
+    +info("已经截止，你提交的版本如下")
     if homework
       p=homework.content
     else
       p 你没有提交本次作业
   else
+    h3=requirement.course.name
+    h3 作业要求
+    h4=requirement.name
+    p=requirement.content
+
+    hr
+    h4 提交内容
+
     - var action = create ? 'new' : homework._id 
     form(class='form-submit', action='/submit/' + action, method='POST')
-      
-      h3=requirement.course.name
-      h3 作业要求
-      h4=requirement.name
-      p=requirement.content
-
-      hr
-      h4 提交内容
       .form-group
         if create
           input.hidden(name='requirement', value=requirement._id)

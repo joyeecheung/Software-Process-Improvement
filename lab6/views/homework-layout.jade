@@ -1,4 +1,5 @@
 extends layout
+include info
 
 block content
   nav.navbar.navbar-default
@@ -20,10 +21,8 @@ block content
   .container-fluid
     .row
       .col-sm-8.col-md-8.col-md-offset-2
-
-      if message && message.length !== 0
-        div.alert.alert-warning#message(role="alert")
-          p.text-center.error-message #{message}
+        if message && message.length !== 0 || typeof message === 'object'
+          +info(message)
 
     .row
       .col-sm-8.col-md-8.col-md-offset-2
