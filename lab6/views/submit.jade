@@ -21,11 +21,11 @@ block main
       hr
       h4 提交内容
       .form-group
-        if homework
-          input.hidden(name='course', value=course)
-          textarea.form-control(name='content')=homework.content
-        else
+        if create
+          input.hidden(name='requirement', value=requirement._id)
           textarea.form-control(name='content')
+        else
+          textarea.form-control(name='content')=homework.content
 
       .form-group
         button.btn.btn-primary(type='submit') 提交
