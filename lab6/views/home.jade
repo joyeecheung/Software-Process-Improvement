@@ -29,4 +29,8 @@ block main
           else
             each homework in requirement.homeworks
               p.homework
-                a.btn.btn-info(href="/submit/"+homework._id) 修改
+                - var now = new Date()
+                if requirement.deadline < now
+                  a.btn.btn-info(href="/submit/"+homework._id) 查看
+                else
+                  a.btn.btn-info(href="/submit/"+homework._id) 修改

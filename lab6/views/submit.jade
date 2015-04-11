@@ -7,6 +7,11 @@ block main
     +info("已经截止，你提交的版本如下")
     if homework
       p=homework.content
+
+      if homework.grade
+        p="分数：" + homework.grade
+      else
+        p 尚未打分
     else
       p 你没有提交本次作业
   else
