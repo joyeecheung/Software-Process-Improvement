@@ -8,6 +8,7 @@ block main
     .requirement
       each requirement in course.requirements
         h4=requirement.name
+        p=requirement.content
 
         if user.isTeacher
           each homework in requirement.homeworks
@@ -16,7 +17,6 @@ block main
               dd.homework-link
                 a.btn.btn-info(href="/grade/"+homework._id) 批改
         else
-          //- - filtered = requirement.homeworks.filter(function(h) {h.student === user._id})
           if requirement.homeworks.length === 0
             p.homework
               a.btn.btn-info(href="/submit/new/?requirement="+requirement._id) 提交

@@ -16,4 +16,5 @@ var homeworkSchema = new Schema({
 });
 
 homeworkSchema.plugin(deepPopulate);
-module.exports = mongoose.model('Homework', homeworkSchema);
+var Homework = mongoose.model('Homework', homeworkSchema);
+module.exports = Homework;
