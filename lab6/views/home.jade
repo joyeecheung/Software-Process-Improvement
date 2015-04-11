@@ -12,6 +12,7 @@ block main
         if user.isTeacher
           p.pull-right
             a.requirement-change.btn.btn-info.btn-xs(href="/publish/"+requirement._id) 修改
+        p="截止日期：" + dateFormat(requirement.deadline, 'yyyy-mm-dd')
         p=requirement.content
 
         if user.isTeacher

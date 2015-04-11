@@ -6,12 +6,12 @@ var dateFormat = require('dateformat');
 
 exports.get = function(app, template) {
   function get(req, res) {
-    console.log(req.query);
     if (req.params.id === 'new') {
       Requirement
       .findOne({_id: req.query.requirement})
       .populate('course')
       .exec(function(err, requirement) {
+        console.log(requirement.deadline);
         res.render(template, {
           user: req.user,
           create: true,
@@ -24,11 +24,12 @@ exports.get = function(app, template) {
       .findOne({_id: req.params.id})
       .deepPopulate('requirement.course')
       .exec(function(err, homework) {
+        console.log(homework.requirement.deadline < new Date());
         res.render(template, {
           user: req.user,
           homework: homework,
           create: false,
-          ended: homework.requirement.deadline < Date(),
+          ended: homework.requirement.deadline < new Date(),
           requirement: homework.requirement
         });
       });

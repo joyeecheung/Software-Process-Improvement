@@ -2,6 +2,7 @@ var User = require('../models/user'),
     Course = require('../models/course'),
     Requirement = require('../models/requirement'),
     Homework = require('../models/homework');
+var dateFormat = require('dateformat');
 
 exports.get = function(app, template) {
   function get(req, res) {
@@ -22,7 +23,8 @@ exports.get = function(app, template) {
 
         res.render(template, {
           user: user,
-          courses: user.courses
+          courses: user.courses,
+          dateFormat: dateFormat
         });
       });
     } else {
@@ -32,7 +34,8 @@ exports.get = function(app, template) {
         if (err) throw err;
         res.render(template, {
           user: req.user,
-          courses: courses
+          courses: courses,
+          dateFormat: dateFormat
         });
       });
     }
