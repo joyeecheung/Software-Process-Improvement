@@ -7,11 +7,10 @@ block content
         a.navbar-brand(href="/home") My Homework
       
       div.collapse.navbar-collapse
-        ul.nav.navbar-nav.navbar-right
-          li.navbar-text
+        div.nav.navbar-nav.navbar-right
+          p.navbar-text
             =user.name
-          li
-            button.btn.btn-default.navbar-btn(type="button") 登出
+          a.btn.btn-default.navbar-btn(type="button", href="/signout") 登出
 
   div.container-fluid
     div.row

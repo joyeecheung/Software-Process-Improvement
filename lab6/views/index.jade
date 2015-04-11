@@ -1,15 +1,15 @@
 extends auth-layout
 
 block main
-  h1.text-center.login-title Sign in to our Passport app
+  h1.text-center.login-title 登录 My Homeworks
     div.account-wall
       img(class='profile-img', src='/static/images/photo.png')
       form(class='form-signin', action='/login', method='POST')
-        input(type='text', name='username' class='form-control', placeholder='Email',required, autofocus)
-        input(type='password', name='password' class='form-control', placeholder='Password', required)
-        button(class='btn btn-lg btn-primary btn-block', type='submit') Sign in
+        input(type='text', name='username' class='form-control', placeholder='邮箱',required, autofocus)
+        input(type='password', name='password' class='form-control', placeholder='密码', required)
+        button(class='btn btn-lg btn-primary btn-block', type='submit') 登陆
         span.clearfix
-    a(href='/signup', class='text-center new-account') Create an account
+    a(href='/signup', class='text-center new-account') 注册
     #message
     if message
       h1.text-center.error-message #{message}
