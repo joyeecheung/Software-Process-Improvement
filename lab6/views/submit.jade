@@ -1,10 +1,18 @@
-extends layout
+extends homework-layout
 
-block content
-  div.container-fluid
-    div.row
-      div.col-sm-8.col-md-8.col-md-offset-2
-        h1.submit-title 提交作业
-        form(class='form-submit', action='/submit', method='POST')
-          textarea
-          button(class='btn btn-lg btn-primary', type='submit') 提交
+block main
+  h1.submit-title 提交作业
+  form(class='form-submit', action='/submit', method='POST')
+    if ended
+      div.alert.alert-warning(role="alert") 已经截止
+      if homework
+        p homework.content
+      else
+        p 你没有提交本次作业
+    else
+      if homework
+        textarea(name='content') homework.content
+        button(class='btn btn-lg btn-primary', type='submit') 提交
+      else
+        textarea(name='content')
+        button(class='btn btn-lg btn-primary', type='submit') 提交

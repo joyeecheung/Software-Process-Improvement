@@ -34,6 +34,7 @@ module.exports = function(passport) {
         newUser.email = req.param('email');
         newUser.firstName = req.param('firstName');
         newUser.lastName = req.param('lastName');
+        newUser.isTeacher = req.param('role') === "teacher";
 
         // save the user
         // Note: mongoose save is not a promise

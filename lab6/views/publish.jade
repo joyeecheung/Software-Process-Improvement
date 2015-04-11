@@ -1,10 +1,23 @@
-extends layout
+extends homework-layout
 
-block content
-  div.container-fluid
-    div.row
-      div.col-sm-8.col-md-8.col-md-offset-2
-        h1.submit-title 发布作业
-        form(class='form-submit', action='/submit', method='POST')
-          textarea(name='content')
-          button(class='btn btn-lg btn-primary', type='submit') 提交
+block main
+  h1.submit-title 发布作业
+  form(class='form-submit', action='/publish', method='POST')
+    if requirement
+      input.hidden(type='text', readonly='readonly', name='requirement', value=requirement._id)
+      label
+        ="作业名称"
+        input(type='text', name='name', value=requirement.name)
+      label
+        ="截止日期"
+        input(type='text', name='deadline', value=requirement.deadline)
+      textarea(name='content', class="form-control", rows="3") requirement.content
+    else
+      div.radio
+        each course in courses
+          label.radio-inline
+            input(type="radio", name="course", value=course._id)
+            =course.name
+      textarea(name='content', class="form-control", rows="3")
+
+    button(class='btn btn-lg btn-primary', type='submit') 提交

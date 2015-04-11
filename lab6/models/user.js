@@ -1,12 +1,19 @@
-
 var mongoose = require('mongoose');
+var Schema = mongoose.Schema;
+var deepPopulate = require('mongoose-deep-populate');
 
-module.exports = mongoose.model('User', {
-	id: String,
-	username: String,
-	password: String,
-	email: String,
-	firstName: String,
-	lastName: String,
-  course: [Schema.Types.ObjectId]
+var userSchema = new Schema({
+  username: String,
+  password: String,
+  email: String,
+  firstName: String,
+  lastName: String,
+  courses: [{
+    type: Schema.Types.ObjectId,
+    ref: 'Course'
+  }],
+  isTeacher: Boolean
 });
+
+userSchema.plugin(deepPopulate);
+module.exports = mongoose.model('User', userSchema);

@@ -1,15 +1,26 @@
-extends layout
+extends homework-layout
 
-block content
-	div.container-fluid
-		div.row
-			div.col-sm-6.col-md-4.col-md-offset-4
-				#user
-					h1.text-center.login-title Welcome #{user.firstName}. Check your details below:
-						div.signup-wall
-							ul.user-details
-								li Username ---> #{user.username}
-								li Email    ---> #{user.email}
-								li First Name ---> #{user.firstName} 
-								li Last Name ---> #{user.lastName}
-						a(href='/signout', class='text-center new-account') Sign Out
+block main
+  each course in courses
+    .course
+      h3=course.name
+
+    .requirement
+      each requirement in course.requirements
+        h4=requirement.name
+
+        if user.isTeacher
+          each homework in requirement.homeworks
+            dl.homework
+              dt.homework-student homework.student.name
+              dd.homework-link
+                a.btn.btn-info(href="/grade/"+homework._id) 批改
+        else
+          //- - filtered = requirement.homeworks.filter(function(h) {h.student === user._id})
+          if requirement.homeworks.length === 0
+            p.homework
+              a.btn.btn-info(href="/submit/new/?requirement="+requirement._id) 提交
+          else
+            each homework in requirement.homeworks
+              p.homework
+                a.btn.btn-info(href="/submit/"+homework._id) 修改
