@@ -6,25 +6,28 @@ var dateFormat = require('dateformat');
 
 exports.get = function(app, template) {
   function get(req, res) {
+    console.log(req.query);
     if (req.params.id === 'new') {
       Requirement
       .findOne({_id: req.query.requirement})
       .populate('course')
       .exec(function(err, requirement) {
         if (requirement.deadline < Date()) {
-          res.render(template, {
-            user: req.user,
-            course: requirement.course,
-            create: true,
-            ended: false,
-            requirement: requirement
-          });
-        } else {
+          console.log('====================Not Ended');
           res.render(template, {
             user: req.user,
             course: requirement.course,
             create: true,
             ended: true,
+            requirement: requirement
+          });
+        } else {
+          console.log('====================Ended');
+          res.render(template, {
+            user: req.user,
+            course: requirement.course,
+            create: true,
+            ended: false,
             requirement: requirement
           });
         }
@@ -34,12 +37,14 @@ exports.get = function(app, template) {
       .findOne({_id: req.params.id})
       .deepPopulate('requirement.course')
       .exec(function(err, homework) {
+        console.log(homework.requirement.deadline)
         if (homework.requirement.deadline < Date()) {
+          console.log('ended')
           res.render(template, {
             user: req.user,
             homework: homework,
             create: false,
-            ended: false,
+            ended: true,
             requirement: homework.requirement
           })
         } else {
@@ -47,7 +52,7 @@ exports.get = function(app, template) {
             user: req.user,
             homework: homework,
             create: false,
-            ended: true,
+            ended: false,
             requirement: homework.requirement
           })
         }

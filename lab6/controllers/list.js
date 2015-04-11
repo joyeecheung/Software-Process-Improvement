@@ -14,11 +14,9 @@ exports.get = function(app, template) {
 
         user.courses.forEach(function(c) {
           c.requirements.forEach(function(r) {
-            console.log(r);
             r.homeworks = r.homeworks.filter(function(h) {
               return h.student.username === user.username
             });
-            console.log(r);
           });
         });
 

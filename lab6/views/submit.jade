@@ -2,18 +2,30 @@ extends homework-layout
 
 block main
   h1.submit-title 提交作业
-  form(class='form-submit', action='/submit', method='POST')
-    if ended
-      div.alert.alert-warning(role="alert")
-        p 已经截止
-      if homework
-        p homework.content
-      else
-        p 你没有提交本次作业
+  if ended
+    div.alert.alert-warning(role="alert")
+      p 已经截止
+    if homework
+      p homework.content
     else
-      if homework
-        textarea(name='content') homework.content
-        button(class='btn btn-lg btn-primary', type='submit') 提交
-      else
-        textarea(name='content')
-        button(class='btn btn-lg btn-primary', type='submit') 提交
+      p 你没有提交本次作业
+  else
+    - var action = create ? 'new' : homework._id 
+    form(class='form-submit', action='/submit/' + action, method='POST')
+      
+      h3=requirement.course.name
+      h3 作业要求
+      h4=requirement.name
+      p=requirement.content
+
+      hr
+      h4 提交内容
+      .form-group
+        if homework
+          input.hidden(name='course', value=course)
+          textarea.form-control(name='content')=homework.content
+        else
+          textarea.form-control(name='content')
+
+      .form-group
+        button.btn.btn-primary(type='submit') 提交

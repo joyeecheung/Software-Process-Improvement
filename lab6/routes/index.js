@@ -22,6 +22,13 @@ function isTeacher(req, res, next) {
   res.redirect('/home');
 }
 
+function isStudent(req, res, next) {
+  if(!req.user.isTeacher)
+    return next();
+
+  res.redirect('/home');
+}
+
 module.exports = function(app, passport) {
 
   /* GET login page. */
@@ -66,6 +73,11 @@ module.exports = function(app, passport) {
   router.get('/publish/:id', isAuthenticated, isTeacher, publish.get(app, 'publish'));
   /* POST publish Page */
   router.post('/publish/:id', isAuthenticated, isTeacher, publish.post(app, 'publish'));
+
+  /* GET submit Page */
+  router.get('/submit/:id', isAuthenticated, isStudent, submit.get(app, 'submit'));
+  /* POST submit Page */
+  router.post('/submit/:id', isAuthenticated, isStudent, submit.post(app, 'submit'));
 
   return router;
 }

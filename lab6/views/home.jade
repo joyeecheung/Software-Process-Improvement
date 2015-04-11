@@ -7,9 +7,11 @@ block main
 
     .requirement
       each requirement in course.requirements
+        hr
         h4=requirement.name
-        p.pull-right
-          a.requirement-change.btn.btn-info.btn-xs(href="/publish/"+requirement._id) 修改
+        if user.isTeacher
+          p.pull-right
+            a.requirement-change.btn.btn-info.btn-xs(href="/publish/"+requirement._id) 修改
         p=requirement.content
 
         if user.isTeacher
