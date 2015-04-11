@@ -6,8 +6,7 @@ var userSchema = new Schema({
   username: String,
   password: String,
   email: String,
-  firstName: String,
-  lastName: String,
+  name: String,
   courses: [{
     type: Schema.Types.ObjectId,
     ref: 'Course'
