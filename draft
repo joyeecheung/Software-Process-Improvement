@@ -1,0 +1,176 @@
+home-teacher.jade
+home-student.jade
+
+/api/courses  return courses
+/api/requirements return list of requirements, check course first
+/api/homeworks return list of homeworks, check id first
+
+
+/api/course
+/api/requirement
+/api/homework
+
+// home-teacher.jade
+ul.courses
+  li.course(ng-repeat="course in myhomework.courses")
+    h3 {{course.name}}
+    ul.requirements
+      li(ng-repeat="requirement in course.requirements")
+        hr
+        h4 {{requirement.name}}
+        p.pull-right(ng-show="requirement.deadline < new Date()")
+          a.requirement-change.btn.btn-info.btn-xs(ui-sref="newRequirement({id: requirement._id})") 查看
+        p.pull-right(ng-hide="requirement.deadline < new Date()")
+          a.requirement-change.btn.btn-info.btn-xs(ui-sref="newRequirement({id: requirement._id})") 修改
+        p 截止日期： {{ requirement.deadline | date: 'yyyy-mm-dd'}}
+        p {{requirement.content}}
+
+        table.table.table-striped
+          tr(ng-repeat="homework in requirement.homeworks")
+            td="{{homework.student.name}}"
+            td.text-right
+              a.btn.btn-info.btn-xs(ui-sref="grade({id: homework._id})") 批改
+
+// home-student.jade
+ul.courses
+  li.course(ng-repeat="course in home.courses")
+    h3 {{course.name}}
+    ul.requirements
+      li(ng-repeat="requirement in course.requirements")
+        hr
+        h4 {{requirement.name}}
+        p="截止日期： {{ requirement.deadline | date: 'yyyy-mm-dd'}} "
+        p {{requirement.content}}
+
+        div(ng-show='!requirement.homeworks.length')
+          div(ng-show='requirement.deadline < new Date()')
+            +info("已经截止提交")
+          div(ng-hide='requirement.deadline < new Date()')
+            a.btn.btn-info(ui-sref="newHomework({requirement: requirement._id})") 提交
+
+        div(ng-hide='!requirement.homeworks.length')
+          div(ng-show='requirement.deadline < new Date()')
+            a.btn.btn-info(ui-sref="viewHomework({homework: requirement.homeworks[0]._id})") 查看
+          div(ng-hide='requirement.deadline < new Date()')
+            a.btn.btn-info(ui-sref="editHomework({homework: requirement.homeworks[0]._id})") 修改
+
+// partials/requirement-add.jade
+div
+  h1.submit-title 发布作业
+  form(class='form-submit', ng-submit="addRequirement")
+    .form-group
+      label
+        ="作业名称"
+        input.form-control(type='text', name='name', ng-model="requirement.name")
+    .form-group
+      label
+        ="截止日期（格式：YYYY-MM-DD，如 2015-09-03）"
+        input.form-control(type='date', name='deadline', placeholder="yyyy-MM-dd", ng-model="requirement.deadline")
+    .form-group
+      label 课程
+      div.radio
+        label.radio-inline(ng-repeat="course in myhomework.courses")
+          input(type="radio", name="course", ng-model="requirement.course", value="{{course._id}}")
+    .form-group
+      textarea(name='content', class="form-control", rows="3", ng-model="requirement.content")
+
+// partials/requirement-edit.jade
+div
+  h1.submit-title 修改作业
+    div(ng-hide="requirement.deadline < new Date()")
+    form(class='form-submit', ng-submit="editRequirement")
+      .form-group
+        label 课程：{{ requirement.course.name }}
+      .form-group
+        label
+          ="作业名称"
+          input.form-control(type='text', name='name', ng-model="requirement.name")
+      .form-group
+        label
+        ="截止日期"
+        input.form-control(type='date', name='deadline', placeholder="yyyy-MM-dd", ng-model="requirement.deadline")
+      
+      .form-group
+        textarea(name='content', class="form-control", rows="3", ng-model="requirement.content")
+
+      .form-group
+        button(class='btn btn-lg btn-primary', type='submit') 提交
+
+    div(ng-hide="requirement.deadline < new Date()")
+      +info({level: 'success', text: "本作业已经截止提交"})
+      h3 课程： {{ requirement.course.name }}
+      h4 {{ requirement.name }}
+      hr
+      p {{ requirement.content }}
+
+
+
+// partials/homework-grade.jade
+h3 {{ homework.requirement.course.name }}
+h3 作业要求
+h4 {{ homework.requirement.name }}
+p {{ homework.requirement.content }}
+
+div(ng-hide="homework.requirement.deadline < new Date()")
+  +info("尚未到达截止日期")
+
+hr
+h4 提交内容
+p.homework-student 学生： {{ homework.student.name }}
+p.homework-content {{ homework.content }}
+form(class='form-submit', ng-submit='updateHomework()')
+  .form-group
+    label
+      input.form-control(type="number", name="grade", ng-model="homework.grade", min="0", max="100")
+  .form-group
+    button(class='btn btn-lg btn-primary', type='submit') 提交
+
+
+// partials/homework-view.jade
+h1.submit-title 查看作业
++info("本次作业已经截止，你提交的版本如下")
+div(ng-show="homework")
+  p {{ homework.content }}
+
+  div(ng-show="homework.grade")
+    p 分数： {{ homework.grade }}
+  div(ng-hide="homework.grade")
+    p 尚未打分
+
+div(ng-hide="homework")
+  p 你没有提交本次作业
+
+
+// partials/homework-edit.jade
+h1.submit-title 编辑作业
+h3 {{ requirement.course.name }}
+h3 作业要求
+h4 {{ requirement.name }}
+p {{ requirement.content }}
+
+hr
+h4 提交内容
+
+form(class='form-submit', ng-submit='updateHomework()')
+  .form-group
+    textarea.form-control(name='content' ng-model="homework.content")
+
+  .form-group
+    button.btn.btn-primary(type='submit') 提交
+
+// partials/homework-add.jade
+h1.submit-title 提交作业
+h3 {{ requirement.course.name }}
+h3 作业要求
+h4 {{ requirement.name }}
+p {{ requirement.content }}
+
+hr
+h4 提交内容
+
+form(class='form-submit', ng-submit='addHomework()')
+  .form-group
+    textarea.form-control(name='content', ng-model="homework.content")
+
+  .form-group
+    button.btn.btn-primary(type='submit') 提交
