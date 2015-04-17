@@ -1,0 +1,23 @@
+extends auth-layout
+
+block main
+  h1.text-center.login-title 注册 My Homeworks
+    div.signup-wall
+      form(class='form-signin', action='/signup', method='POST')
+        .form-group
+          input.form-control(type='text', name='username', placeholder='用户名',required, autofocus)
+          input.form-control(type='password', name='password', placeholder='密码', required)
+        .form-group
+          input.form-control(type='email', name='email', placeholder='邮箱',required)
+          input.form-control(type='text', name='name', placeholder='姓名',required)
+        .form-group
+          .radio
+            label.radio-inline
+              input(type="radio", name="role", value="student")
+              ="学生"
+            label.radio-inline
+              input(type="radio", name="role", value="teacher")
+              ="老师"
+        .form-group
+          button(class='btn btn-lg btn-primary btn-block', type='submit') 注册
+        span.clearfix

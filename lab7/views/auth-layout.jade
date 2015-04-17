@@ -1,0 +1,15 @@
+extends layout
+
+block style
+  link(rel='stylesheet', href='/asset/css/style.css')
+
+block content
+  div.container-fluid
+  div.row
+    div.col-sm-6.col-md-4.col-md-offset-4
+
+      if message && message.length !== 0
+        div.alert.alert-warning#message(role="alert")
+          p.text-center.error-message #{message}
+      
+      block main

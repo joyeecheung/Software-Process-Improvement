@@ -1,0 +1,29 @@
+extends layout
+include info
+
+block content
+  nav.navbar.navbar-default
+    .container-fluid
+      .navbar-header
+        a.navbar-brand(href="/home") My Homework
+      
+      div.collapse.navbar-collapse
+        if user.isTeacher
+          ul.nav.nav-pills.navbar-nav.navbar-left
+            li(role="presentation")
+              a(href="/publish/new") 发布新作业
+
+        .navbar-nav.navbar-right
+          p.navbar-text
+            =user.name
+          a.btn.btn-default.navbar-btn(type="button", href="/signout") 登出
+
+  .container-fluid
+    .row
+      .col-sm-8.col-md-8.col-md-offset-2
+        if message && message.length !== 0 || typeof message === 'object'
+          +info(message)
+
+    .row
+      .col-sm-8.col-md-8.col-md-offset-2
+        block main

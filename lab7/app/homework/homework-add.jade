@@ -1,0 +1,15 @@
+h1.submit-title 提交作业
+h3 {{ requirement.course.name }}
+h3 作业要求
+h4 {{ requirement.name }}
+p {{ requirement.content }}
+
+hr
+h4 提交内容
+
+form(class='form-submit', ng-submit='addHomework()')
+  .form-group
+    textarea.form-control(name='content', ng-model="homework.content")
+
+  .form-group
+    button.btn.btn-primary(type='submit') 提交

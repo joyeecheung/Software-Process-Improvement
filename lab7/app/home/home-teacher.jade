@@ -1,0 +1,19 @@
+ul.courses
+  li.course(ng-repeat="course in myhomework.courses")
+    h3 {{course.name}}
+    ul.requirements
+      li(ng-repeat="requirement in course.requirements")
+        hr
+        h4 {{requirement.name}}
+        p.pull-right(ng-show="requirement.deadline < new Date()")
+          a.requirement-change.btn.btn-info.btn-xs(ui-sref="newRequirement({id: requirement._id})") 查看
+        p.pull-right(ng-hide="requirement.deadline < new Date()")
+          a.requirement-change.btn.btn-info.btn-xs(ui-sref="newRequirement({id: requirement._id})") 修改
+        p 截止日期： {{ requirement.deadline | date: 'yyyy-mm-dd'}}
+        p {{requirement.content}}
+
+        table.table.table-striped
+          tr(ng-repeat="homework in requirement.homeworks")
+            td="{{homework.student.name}}"
+            td.text-right
+              a.btn.btn-info.btn-xs(ui-sref="grade({id: homework._id})") 批改

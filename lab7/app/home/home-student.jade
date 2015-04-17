@@ -1,0 +1,23 @@
+include ../common/info.jade
+
+ul.courses
+  li.course(ng-repeat="course in home.courses")
+    h3 {{course.name}}
+    ul.requirements
+      li(ng-repeat="requirement in course.requirements")
+        hr
+        h4 {{requirement.name}}
+        p="截止日期： {{ requirement.deadline | date: 'yyyy-mm-dd'}} "
+        p {{requirement.content}}
+
+        div(ng-show='!requirement.homeworks.length')
+          div(ng-show='requirement.deadline < new Date()')
+            +info("已经截止提交")
+          div(ng-hide='requirement.deadline < new Date()')
+            a.btn.btn-info(ui-sref="newHomework({requirement: requirement._id})") 提交
+
+        div(ng-hide='!requirement.homeworks.length')
+          div(ng-show='requirement.deadline < new Date()')
+            a.btn.btn-info(ui-sref="viewHomework({homework: requirement.homeworks[0]._id})") 查看
+          div(ng-hide='requirement.deadline < new Date()')
+            a.btn.btn-info(ui-sref="editHomework({homework: requirement.homeworks[0]._id})") 修改
