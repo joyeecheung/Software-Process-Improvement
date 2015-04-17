@@ -10,7 +10,12 @@ exports.get = function(app) {
     .deepPopulate('requirement.course')
     .exec()
     .then(function(homework) {
-      res.json(homework);
+      if (!req.user.isTeacher && !homework.student.equals(req.user._id)) {
+        console.log('belong to ' + homework.student + ', user is ' + req.user._id)
+        res.status(403).end();
+      } else {
+        res.json(homework);
+      }
     });
   }
   return get;
@@ -72,5 +77,5 @@ exports.postUpdate = function(app) {
     });
   }
 
-  return put;
+  return post;
 };

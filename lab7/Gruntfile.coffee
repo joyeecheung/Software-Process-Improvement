@@ -13,6 +13,12 @@ module.exports = (grunt) ->
         tasks: ["express:dev"]
         options:
           spawn: false
+      jade:
+        files: [ "app/**/*.jade" ]
+        tasks: [ "jade:compile" ]
+      copy:
+        files: ["app/**/*", "!app/**/*.jade"]
+        tasks: [ "copy:app" ]
 
     express:
       dev:
@@ -20,4 +26,26 @@ module.exports = (grunt) ->
           script: 'bin/www'
           livereload: true
 
-  grunt.registerTask "default", ["express", "watch"]
+    jade:
+      compile:
+        options:
+          pretty: true
+        files: [{
+          expand: true,
+          cwd: "app",
+          src: ["**/*.jade", "!common/mixins/*.jade"],
+          ext: ".html"
+          dest: "public/app/"
+        }]
+
+    copy:
+      app:
+        files: [{
+          expand: true,
+          cwd: "app",
+          src: ["app/**/*", "!app/**/*.jade"],
+          dest: "public/app/"
+        }]
+
+
+  grunt.registerTask "default", ["copy", "jade", "express", "watch"]

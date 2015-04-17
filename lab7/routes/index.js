@@ -41,10 +41,7 @@ module.exports = function(app, passport) {
   });
 
   /* GET Home Page */
-  router.get('/home', auth.isAuthenticated, list.get(app, {
-    student: 'home-student',
-    teacher: 'home-teacher'
-  }));
+  router.get('/home', auth.isAuthenticated, home.get(app, 'my-homework'));
 
   return router;
 }

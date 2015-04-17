@@ -1,5 +1,3 @@
-include ../common/info.jade
-
 ul.courses
   li.course(ng-repeat="course in home.courses")
     h3 {{course.name}}
@@ -12,7 +10,8 @@ ul.courses
 
         div(ng-show='!requirement.homeworks.length')
           div(ng-show='requirement.deadline < new Date()')
-            +info("已经截止提交")
+            div.alert(class="alert-warning", role="alert")
+            p 已经截止提交
           div(ng-hide='requirement.deadline < new Date()')
             a.btn.btn-info(ui-sref="newHomework({requirement: requirement._id})") 提交
 

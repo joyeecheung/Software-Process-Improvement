@@ -45,7 +45,7 @@ exports.get = function(app) {
     .exec()
     .then(function(user) {
       res.json({
-        course: user.course
+        course: user.courses
       });
     });
   }

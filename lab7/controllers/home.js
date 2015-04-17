@@ -1,10 +1,6 @@
-exports.get = function(app, templates) {
+exports.get = function(app, template) {
   function get(req, res) {
-    if (req.user.isTeacher) {
-      res.render(template.teacher);
-    } else {
-      res.render(template.student);
-    }
+    res.render(template);
   }
   return get;
 }
