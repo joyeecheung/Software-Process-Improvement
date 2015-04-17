@@ -46,6 +46,11 @@ module.exports = (grunt) ->
           src: ["app/**/*", "!app/**/*.jade"],
           dest: "public/app/"
         }]
-
+      lib:
+        expand: true,
+        src: ["**/*.min.js"],
+        cwd: "bower_components"
+        dest: "public/asset/js/lib/",
+        flatten: true
 
   grunt.registerTask "default", ["copy", "jade", "express", "watch"]
