@@ -1,23 +1,23 @@
 div
   h1.submit-title 修改作业
   div(ng-hide="requirement.deadline && requirement.deadline < now")
-  form(class='form-submit', ng-submit="editRequirement()")
-    .form-group
-      label 课程：{{ requirement.course.name }}
-    .form-group
-      label
-        ="作业名称"
-        input.form-control(type='text', name='name', ng-model="requirement.name")
-    .form-group
-      label
-        ="截止日期"
-        input.form-control(type='date', name='deadline', min="{{now | date: 'yyyy-MM-dd'}}", placeholder="yyyy-MM-dd", ng-model="requirement.deadline")
+    form(class='form-submit', ng-submit="editRequirement()")
+      .form-group
+        label 课程：{{ requirement.course.name }}
+      .form-group
+        label
+          ="作业名称"
+          input.form-control(type='text', name='name', ng-model="requirement.name")
+      .form-group
+        label
+          ="截止日期"
+          input.form-control(type='date', name='deadline', min="{{now | date: 'yyyy-MM-dd'}}", placeholder="yyyy-MM-dd", ng-model="requirement.deadline")
 
-    .form-group
-      textarea(name='content', class="form-control", rows="3", ng-model="requirement.content")
+      .form-group
+        textarea(name='content', class="form-control", rows="3", ng-model="requirement.content")
 
-    .form-group
-      button(class='btn btn-lg btn-primary', type='submit') 提交
+      .form-group
+        button(class='btn btn-lg btn-primary', type='submit') 提交
 
   div(ng-show="requirement.deadline && requirement.deadline < now")
     .alert(class="alert-success", role="alert")
