@@ -1,6 +1,9 @@
 div
   h1.submit-title 修改作业
   div(ng-hide="requirement.deadline && requirement.deadline < now")
+    .alert(class="alert-success", role="alert", ng-show="success")
+      p 提交成功！
+
     form(class='form-submit', ng-submit="editRequirement()")
       .form-group
         label 课程：{{ requirement.course.name }}

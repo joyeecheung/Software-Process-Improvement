@@ -13,7 +13,9 @@
       });
 
       $scope.addRequirement = function() {
-        Requirement.post($scope.requirement);
+        Requirement.post($scope.requirement).then(function(res) {
+          $scope.success = res.success;
+        });
       }
 
     }]);
@@ -26,13 +28,14 @@
       Requirement.one($stateParams.id).get().then(function(requirement) {
         requirement.deadline = new Date(requirement.deadline);
         $scope.requirement = requirement;
-        console.log($scope.requirement.deadline < $scope.now);
       });
 
 
 
       $scope.editRequirement = function() {
-        $scope.requirement.put();
+        $scope.requirement.put().then(function(res) {
+          $scope.success = res.success;
+        });
       }
   }]);
 }());

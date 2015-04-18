@@ -1,6 +1,9 @@
 div
   h1.submit-title 发布作业
   form(class='form-submit', ng-submit="addRequirement()")
+    .alert(class="alert-success", role="alert", ng-show="success")
+      p 提交成功！
+
     .form-group
       label
         ="作业名称"
