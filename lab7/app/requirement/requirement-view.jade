@@ -1,0 +1,8 @@
+div
+  h1.submit-title 查看作业
+  .alert(class="alert-success", role="alert")
+    p 本作业已经截止提交
+  h3 课程： {{ requirement.course.name }}
+  h4 {{ requirement.name }}
+  hr
+  p {{ requirement.content }}

@@ -6,15 +6,15 @@
   app.config(['$stateProvider', 'RestangularProvider',
    function($stateProvider, RestangularProvider) {
     $stateProvider.state('home-teacher', {
-      url: '/home',
+      url: '/home-teacher',
       templateUrl: '/app/home/home-teacher.html',
       controller: 'HomeTeacherCtrl'
     }).state('home-student', {
-      url: '/home',
+      url: '/home-student',
       templateUrl: '/app/home/home-student.html',
       controller: 'HomeStudentCtrl'
     }).state('addHomework', {
-      url: '/homework/add',
+      url: '/homework/add/:requirementid',
       templateUrl: '/app/homework/homework-add.html',
       controller: 'HomeworkAddCtrl'
     }).state('editHomework', {
@@ -37,6 +37,10 @@
       url: '/requirement/:id/edit',
       templateUrl: '/app/requirement/requirement-edit.html',
       controller: 'RequirementEditCtrl'
+    }).state('viewRequirement', {
+      url: '/requirement/:id/view',
+      templateUrl: '/app/requirement/requirement-view.html',
+      controller: 'RequirementViewCtrl'
     });
 
     RestangularProvider.setRestangularFields({
@@ -47,7 +51,6 @@
   app.run(['$rootScope', '$state', 'Restangular', function($rootScope, $state, Restangular) {
     var user = Restangular.one('/api/user/me').get().then(function(user) {
       $rootScope.user = user;
-
       if (user.isTeacher) {
         $state.go('home-teacher');
       } else {

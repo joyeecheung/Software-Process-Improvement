@@ -12,12 +12,11 @@
         $scope.now = new Date();
       });
 
-      $scope.addRequirement = function() {
+      $scope.addHomework = function() {
         Requirement.post($scope.requirement).then(function(res) {
           $scope.success = res.success;
         });
       }
-
     }]);
 
   angular.module('MyHomework').controller('RequirementEditCtrl',
@@ -35,5 +34,16 @@
           $scope.success = res.success;
         });
       }
+  }]);
+
+  angular.module('MyHomework').controller('RequirementViewCtrl',
+    ['$scope', '$stateParams', 'Requirement',
+    function($scope, $stateParams, Requirement) {
+      $scope.now = new Date();
+
+      Requirement.one($stateParams.id).get().then(function(requirement) {
+        requirement.deadline = new Date(requirement.deadline);
+        $scope.requirement = requirement;
+      });
   }]);
 }());

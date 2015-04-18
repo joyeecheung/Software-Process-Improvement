@@ -1,8 +1,18 @@
 h1.submit-title 提交作业
 h3 {{ requirement.course.name }}
+
+div.alert(ng-show="success", class="alert-success", role="alert")
+  p 提交成功！
+
+hr
+
 h3 作业要求
 h4 {{ requirement.name }}
+
+p 截止日期：{{ requirement.deadline | date: 'yyyy-MM-dd' }}
+
 p {{ requirement.content }}
+
 
 hr
 h4 提交内容

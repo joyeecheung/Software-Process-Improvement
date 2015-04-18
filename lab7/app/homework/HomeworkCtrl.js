@@ -2,9 +2,23 @@
   'use strict';
 
   angular.module('MyHomework').controller('HomeworkAddCtrl',
-    ['$scope', 'Homework', function($scope, Homework) {
+    ['$scope', '$stateParams', 'Homework', 'Requirement',
+    function($scope, $stateParams, Homework, Requirement) {
       $scope.now = new Date();
+      $scope.homework = {
+        requirement: $stateParams.requirementid
+      }
 
+      Requirement.one($stateParams.requirementid).get().then(function(requirement) {
+        requirement.deadline = new Date(requirement.deadline);
+        $scope.requirement = requirement;
+      });
+
+      $scope.addHomework = function() {
+        Homework.post($scope.homework).then(function(res) {
+          $scope.success = res.success;
+        });
+      }
     }]);
 
   angular.module('MyHomework').controller('HomeworkEditCtrl',
@@ -16,7 +30,7 @@
         $scope.homework = homework;
       });
 
-      $scope.gradeHomework = function() {
+      $scope.editHomework = function() {
         $scope.homework.put().then(function(res) {
           $scope.success = res.success;
         });
