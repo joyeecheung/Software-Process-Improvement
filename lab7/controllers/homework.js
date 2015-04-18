@@ -21,12 +21,12 @@ exports.get = function(app) {
   return get;
 };
 
-exports.postNew = function(app) {
+exports.post = function(app) {
   function post(req, res) {
     var newHomework = {
-      content: req.params.content,
+      content: req.body.content,
       student: req.user._id,
-      requirement: req.params.requirement
+      requirement: req.body.requirement
     };
 
     var homework = new Homework(newHomework);
@@ -55,14 +55,14 @@ exports.postNew = function(app) {
   return post;
 };
 
-exports.postUpdate = function(app) {
+exports.put = function(app) {
 
-  function post(req, res) {
+  function put(req, res) {
     var newHomework = {};
     if (req.user.isTeacher) {
-      newHomework.grade = Number(req.params.grade);
+      newHomework.grade = Number(req.body.grade);
     } else {
-      newHomework.content = req.params.content;
+      newHomework.content = req.body.content;
     }
 
     Homework
@@ -77,5 +77,5 @@ exports.postUpdate = function(app) {
     });
   }
 
-  return post;
+  return put;
 };

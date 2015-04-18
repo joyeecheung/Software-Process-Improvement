@@ -30,8 +30,6 @@
         $scope.requirement = requirement;
       });
 
-
-
       $scope.editRequirement = function() {
         $scope.requirement.put().then(function(res) {
           $scope.success = res.success;

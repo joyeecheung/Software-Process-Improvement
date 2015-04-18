@@ -37,9 +37,9 @@ module.exports = function(app, passport) {
   router.get('/homeworks/:id', isAuthenticatedAPI,
              homework.get(app));
   router.post('/homeworks', isAuthenticatedAPI, isStudent,
-             homework.postNew(app));
+             homework.post(app));
   router.put('/homeworks/:id', isAuthenticatedAPI,
-             homework.postUpdate(app));
+             homework.put(app));
 
   return router;
 }

@@ -61,7 +61,7 @@ exports.put = function(app) {
     };
 
     Requirement
-    .findOneAndUpdate({ _id: req.body._id },
+    .findOneAndUpdate({ _id: req.params.id },
                       { $set: newRequirement })
     .exec()
     .then(function(requirement) {

@@ -7,11 +7,14 @@ div(ng-hide="homework.requirement.deadline < now")
   div.alert(class="alert-warning", role="alert")
     p 尚未到达截止日期
 
+div.alert(ng-show="success", class="alert-success", role="alert")
+    p 提交成功！
+
 hr
 h4 提交内容
 p.homework-student 学生： {{ homework.student.name }}
 p.homework-content {{ homework.content }}
-form(class='form-submit', ng-submit='updateHomework()')
+form(class='form-submit', ng-submit='gradeHomework()')
   .form-group
     label
       input.form-control(type="number", name="grade", ng-model="homework.grade", min="0", max="100")
