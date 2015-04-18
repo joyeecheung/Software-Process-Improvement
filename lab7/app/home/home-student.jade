@@ -11,7 +11,7 @@ ul.courses
         div(ng-show='!requirement.homeworks.length')
           div(ng-show='requirement.deadline < now')
             div.alert(class="alert-warning", role="alert")
-            p 已经截止提交
+              p 已经截止提交
           div(ng-hide='requirement.deadline < now')
             a.btn.btn-info(ui-sref="addHomework({requirementid: requirement._id})") 提交
 

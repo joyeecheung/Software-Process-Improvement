@@ -12,7 +12,7 @@
         $scope.now = new Date();
       });
 
-      $scope.addHomework = function() {
+      $scope.addRequirement= function() {
         Requirement.post($scope.requirement).then(function(res) {
           $scope.success = res.success;
         });

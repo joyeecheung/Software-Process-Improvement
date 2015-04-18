@@ -53,6 +53,7 @@
       $scope.now = new Date();
 
       Homework.one($stateParams.id).get().then(function(homework) {
+        homework.requirement.deadline = new Date(homework.requirement.deadline);
         $scope.homework = homework;
       });
 
