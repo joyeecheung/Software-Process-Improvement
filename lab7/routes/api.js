@@ -19,20 +19,26 @@ module.exports = function(app, passport) {
   router.get('/courses/all', isAuthenticatedAPI,
              course.getAll(app));
 
-  router.get('/requirement/:id', isAuthenticatedAPI,
+  router.get('/requirements/:id', isAuthenticatedAPI,
               requirement.get(app));
   router.post('/requirements', isAuthenticatedAPI, isTeacher,
               requirement.post(app));
-  // idempotent
-  router.put('/requirement/:id', isAuthenticatedAPI, isTeacher,
+  router.put('/requirements/:id', isAuthenticatedAPI, isTeacher,
               requirement.put(app));
+  // router.post('/requirements', isAuthenticatedAPI, isTeacher,
+  //             function(req, res) {
+  //               console.log(req.body);
+  //             });
+  // router.put('/requirements/:id', isAuthenticatedAPI, isTeacher,
+  //             function(req, res) {
+  //               console.log(req.body);
+  //             });
 
-  router.get('/homework/:id', isAuthenticatedAPI,
+  router.get('/homeworks/:id', isAuthenticatedAPI,
              homework.get(app));
   router.post('/homeworks', isAuthenticatedAPI, isStudent,
              homework.postNew(app));
-  // non-idempotent
-  router.post('/homework/:id', isAuthenticatedAPI,
+  router.put('/homeworks/:id', isAuthenticatedAPI,
              homework.postUpdate(app));
 
   return router;

@@ -13,10 +13,10 @@ ul.courses
             div.alert(class="alert-warning", role="alert")
             p 已经截止提交
           div(ng-hide='requirement.deadline < now')
-            a.btn.btn-info(ui-sref="newHomework({requirement: requirement._id})") 提交
+            a.btn.btn-info(ui-sref="addHomework({id: requirement._id})") 提交
 
         div(ng-hide='!requirement.homeworks.length')
           div(ng-show='requirement.deadline < now')
-            a.btn.btn-info(ui-sref="viewHomework({homework: requirement.homeworks[0]._id})") 查看
+            a.btn.btn-info(ui-sref="viewHomework({id: requirement.homeworks[0]._id})") 查看
           div(ng-hide='requirement.deadline < now')
-            a.btn.btn-info(ui-sref="editHomework({homework: requirement.homeworks[0]._id})") 修改
+            a.btn.btn-info(ui-sref="editHomework({id: requirement.homeworks[0]._id})") 修改

@@ -41,12 +41,10 @@ exports.get = function(app) {
     User
     .findOne({ username: req.user.username })  // 1
     .lean()
-    .populate('course')
+    .populate('courses')
     .exec()
     .then(function(user) {
-      res.json({
-        course: user.courses
-      });
+      res.json(user.courses);
     });
   }
 

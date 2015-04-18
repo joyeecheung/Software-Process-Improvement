@@ -1,0 +1,19 @@
+h3 {{ homework.requirement.course.name }}
+h3 作业要求
+h4 {{ homework.requirement.name }}
+p {{ homework.requirement.content }}
+
+div(ng-hide="homework.requirement.deadline < now")
+  div.alert(class="alert-warning", role="alert")
+    p 尚未到达截止日期
+
+hr
+h4 提交内容
+p.homework-student 学生： {{ homework.student.name }}
+p.homework-content {{ homework.content }}
+form(class='form-submit', ng-submit='updateHomework()')
+  .form-group
+    label
+      input.form-control(type="number", name="grade", ng-model="homework.grade", min="0", max="100")
+  .form-group
+    button(class='btn btn-lg btn-primary', type='submit') 提交

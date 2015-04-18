@@ -7,16 +7,19 @@ block content
   nav.navbar.navbar-default
     .container-fluid
       .navbar-header
-        a.navbar-brand(ui-sref="/home") My Homework
-      
+        if user.isTeacher
+          a.navbar-brand(ui-sref="home-teacher") My Homework
+        else
+          a.navbar-brand(ui-sref="home-student") My Homework
+
       div.collapse.navbar-collapse
-        div(ng-show="user.isTeacher")
+        if user.isTeacher
           ul.nav.nav-pills.navbar-nav.navbar-left
             li(role="presentation")
-              a(ui-sref="newRequirement()") 发布新作业
+              a(ui-sref="addRequirement") 发布新作业
 
         .navbar-nav.navbar-right
-          p.navbar-text {{ user.name }}
+          p.navbar-text=user.name
           a.btn.btn-default.navbar-btn(type="button", href="/signout") 登出
 
   .container-fluid
@@ -31,4 +34,7 @@ block script
   script(src="/asset/js/lib/angular-ui-router.min.js")
 
   script(src="/app/app.js")
+  script(src="/app/common/resources.js")
   script(src="/app/home/HomeCtrl.js")
+  script(src="/app/homework/HomeworkCtrl.js")
+  script(src="/app/requirement/RequirementCtrl.js")

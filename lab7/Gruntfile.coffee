@@ -47,7 +47,7 @@ module.exports = (grunt) ->
         files: [{
           expand: true,
           cwd: "app",
-          src: ["app/**/*", "!app/**/*.jade"],
+          src: ["**/*", "!**/*.jade"],
           dest: "public/app/"
         }]
       lib:

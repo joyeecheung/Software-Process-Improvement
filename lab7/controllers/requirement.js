@@ -20,10 +20,10 @@ exports.get = function(app) {
 exports.post = function(app) {
   function post(req, res) {
     var newRequirement = {
-      deadline: new Date(req.params.deadline),
-      content: req.params.content,
-      name: req.params.name,
-      course: req.params.course
+      deadline: new Date(req.body.deadline),
+      content: req.body.content,
+      name: req.body.name,
+      course: req.body.course
     };
 
     var requirement = new Requirement(newRequirement);
@@ -55,13 +55,13 @@ exports.post = function(app) {
 exports.put = function(app) {
   function put(req, res) {
     var newRequirement = {
-      deadline: new Date(req.params.deadline),
-      content: req.params.content,
-      name: req.params.name
+      deadline: new Date(req.body.deadline),
+      content: req.body.content,
+      name: req.body.name
     };
 
     Requirement
-    .findOneAndUpdate({ _id: req.params.id },
+    .findOneAndUpdate({ _id: req.body._id },
                       { $set: newRequirement })
     .exec()
     .then(function(requirement) {

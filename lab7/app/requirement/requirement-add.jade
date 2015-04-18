@@ -1,18 +1,22 @@
 div
   h1.submit-title 发布作业
-  form(class='form-submit', ng-submit="addRequirement")
+  form(class='form-submit', ng-submit="addRequirement()")
     .form-group
       label
         ="作业名称"
         input.form-control(type='text', name='name', ng-model="requirement.name")
     .form-group
       label
-        ="截止日期（格式：YYYY-MM-DD，如 2015-09-03）"
-        input.form-control(type='date', name='deadline', placeholder="yyyy-MM-dd", ng-model="requirement.deadline")
+        ="截止日期"
+        input.form-control(type='date', name='deadline', min="{{now}}", placeholder="yyyy-MM-dd", ng-model="requirement.deadline")
     .form-group
       label 课程
       div.radio
-        label.radio-inline(ng-repeat="course in myhomework.courses")
+        label.radio-inline(ng-repeat="course in courses")
           input(type="radio", name="course", ng-model="requirement.course", value="{{course._id}}")
+          ="{{course.name}}"
     .form-group
       textarea(name='content', class="form-control", rows="3", ng-model="requirement.content")
+
+    .form-group
+      button(class='btn btn-lg btn-primary', type='submit') 提交

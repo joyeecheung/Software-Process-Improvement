@@ -6,14 +6,14 @@ ul.courses
         hr
         h4 {{requirement.name}}
         p.pull-right(ng-show="requirement.deadline < now")
-          a.requirement-change.btn.btn-info.btn-xs(ui-sref="newRequirement({id: requirement._id})") 查看
+          a.requirement-change.btn.btn-info.btn-xs(ui-sref="addRequirement({id: requirement._id})") 查看
         p.pull-right(ng-hide="requirement.deadline < now")
-          a.requirement-change.btn.btn-info.btn-xs(ui-sref="newRequirement({id: requirement._id})") 修改
-        p 截止日期： {{ requirement.deadline | date: 'yyyy-mm-dd'}}
+          a.requirement-change.btn.btn-info.btn-xs(ui-sref="editRequirement({id: requirement._id})") 修改
+        p 截止日期： {{ requirement.deadline | date: 'yyyy-MM-dd'}}
         p {{requirement.content}}
 
         table.table.table-striped
           tr(ng-repeat="homework in requirement.homeworks")
             td="{{homework.student.name}}"
             td.text-right
-              a.btn.btn-info.btn-xs(ui-sref="grade({id: homework._id})") 批改
+              a.btn.btn-info.btn-xs(ui-sref="gradeHomework({id: homework._id})") 批改

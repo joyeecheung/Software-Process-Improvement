@@ -2,3 +2,4 @@ public/app
 *.log
 test.js
 bower_components
+node_modules
