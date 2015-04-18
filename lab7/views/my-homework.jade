@@ -1,5 +1,8 @@
 extends homework-layout
 
+block style
+  link(rel='stylesheet', href='/asset/css/homework.css')
+
 block content
   nav.navbar.navbar-default
     .container-fluid
@@ -23,6 +26,9 @@ block content
 
 block script
   script(src="/asset/js/lib/angular.min.js")
-  script(src="/asset/js/lib/angular-resource.min.js")
+  script(src="/asset/js/lib/lodash.min.js")
+  script(src="/asset/js/lib/restangular.min.js")
   script(src="/asset/js/lib/angular-ui-router.min.js")
+
   script(src="/app/app.js")
+  script(src="/app/home/HomeCtrl.js")

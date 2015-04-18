@@ -3,13 +3,17 @@ var express = require('express'),
     auth = require('../middlewares/auth'),
     requirement = require('../controllers/requirement'),
     homework = require('../controllers/homework'),
-    course = require('../controllers/course');
+    course = require('../controllers/course'),
+    user = require('../controllers/user');
 
 var isAuthenticatedAPI = auth.isAuthenticatedAPI,
     isTeacher = auth.isTeacher,
     isStudent = auth.isStudent;
 
 module.exports = function(app, passport) {
+  router.get('/user/me', isAuthenticatedAPI,
+              user.get(app));
+
   router.get('/courses', isAuthenticatedAPI,
               course.get(app));
   router.get('/courses/all', isAuthenticatedAPI,

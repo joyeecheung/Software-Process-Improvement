@@ -86,3 +86,8 @@ h1.error-message{
 ul.user-details{
     list-style: none;
 }
+
+.courses, .requirements {
+    padding: 0;
+    list-style-type: none;
+}

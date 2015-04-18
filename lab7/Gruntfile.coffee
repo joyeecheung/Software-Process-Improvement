@@ -9,7 +9,7 @@ module.exports = (grunt) ->
       options:
         livereload: true
       express:
-        files: [ "**/*.js", "**/*.jade", "Gruntfile.*", "!public/**/*.js" ]
+        files: [ "**/*.js", "**/*.jade", "Gruntfile.*", "!app/**/*.jade", "!public/**/*.js", "!app/**/*.js" ]
         tasks: ["express:dev"]
         options:
           spawn: false
@@ -19,6 +19,10 @@ module.exports = (grunt) ->
       copy:
         files: ["app/**/*", "!app/**/*.jade"]
         tasks: [ "copy:app" ]
+      public:
+        files: ["public/**/*"]
+        options:
+          livereload: true
 
     express:
       dev:
