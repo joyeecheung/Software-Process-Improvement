@@ -1,9 +1,12 @@
-<template name="commentItem">
-  <li>
-    <h4>
-      <span class="author">{{author}}</span>
-      <span class="date">on {{submittedText}}</span>
-    </h4>
-    <p>{{body}}</p>
-  </li>
+<template name="editHomework">
+  <h1 class="submit-title">编辑作业</h1>
+  <hr>
+  <form class="form">
+    <div class="form-group {{errorClass 'content' 'homeworkEditErrors'}}">
+      <label for="content">提交内容</label>
+      <textarea name="content" id="content" class="form-control" rows="3">{{content}}</textarea>
+      <span class="help-block">{{errorMessage 'content' 'homeworkEditErrors'}}</span>
+    </div>
+    <button type="submit" class="btn btn-primary">提交</button>
+  </form>
 </template>

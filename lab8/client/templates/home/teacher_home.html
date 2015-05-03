@@ -1,7 +1,7 @@
 <template name="teacherHome">
   <ul class="courses">
-    {{#each courses}}
-      {{> courseItem}}
+    {{#each getCourses}}
+      {{> teacherCourseItem}}
     {{/each}}
   </ul>
 </template>
@@ -10,8 +10,8 @@
   <li class="course">
     <h3>{{name}}</h3>
     <ul class="requirements">
-      {{#each requirements _id}}
-        {{> requirementItem}}
+      {{#each getRequirementsByCourse _id}}
+        {{> teacherRequirementItem}}
       {{/each}}
     </ul>
   </li>
@@ -36,7 +36,7 @@
     </p>
 
     <table class="table table-striped">
-      {{#each homeworks _id}}
+      {{#each getHomeworksByRequirement _id}}
         {{> teacherHomeworkItem}}
       {{/each}}
     </table>

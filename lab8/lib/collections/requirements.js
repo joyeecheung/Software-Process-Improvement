@@ -27,7 +27,7 @@ Meteor.methods({
     if (!course)
       throw new Meteor.Error('invalid-homework', '作业要求必须发布到存在的课程里');
 
-    var errors = validateRequirement(modifier.$set);
+    var errors = validateRequirement(requirement);
     if (!_.isEmpty(errors))
       throw new Meteor.Error('invalid-requirement', "必须提交所有项");
 

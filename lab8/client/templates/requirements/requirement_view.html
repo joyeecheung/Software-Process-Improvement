@@ -1,16 +1,12 @@
-<template name="postItem">
-  <div class="post">
-    <div class="post-content">
-      <h3>
-        <a href="{{url}}">{{title}}</a>
-        <span>{{domain}}</span>
-      </h3>
-      <p>
-        submitted by {{author}},
-        <a href="{{pathFor 'postPage'}}">{{commentsCount}} comments</a>
-        {{#if ownPost}} <a href="{{pathFor 'postEdit'}}">Edit</a> {{/if}}
-      </p>
+<template name="viewRequirement">
+  <div>
+    <h1 class="submit-title">查看作业</h1>
+    <div class="alert alert-success" role="alert">
+      <p>本作业已经截止提交</p>
     </div>
-    <a href="{{pathFor 'postPage'}}" class="discuss btn btn-default">Discuss</a>
+    
+    <h4>{{name}}</h4>
+    <hr>
+    <p>{{content}}</p>
   </div>
 </template>

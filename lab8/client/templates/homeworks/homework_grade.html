@@ -1,9 +1,19 @@
-<template name="commentItem">
-  <li>
-    <h4>
-      <span class="author">{{author}}</span>
-      <span class="date">on {{submittedText}}</span>
-    </h4>
-    <p>{{body}}</p>
-  </li>
+<template name="gradeHomework">
+  <h1 class="submit-title">批改作业</h1>
+  <hr>
+  <h4>提交内容</h4> 
+  <p class="homework-content">{{content}}</p>
+  <hr>
+  <form class="form">
+    <div class="form-group {{errorClass 'content' 'homeworkGradeErrors'}}">
+      <label for="grade">分数</label>
+      {{#if grade}}
+        <input name="grade" id="content" class="form-control" value="{{grade}}"></input>
+      {{else}}
+        <input name="grade" id="content" class="form-control" value="{{60}}"></input>
+      {{/if}}
+      <span class="help-block">{{errorMessage 'grade' 'homeworkGradeErrors'}}</span>
+    </div>
+    <button type="submit" class="btn btn-primary">提交</button>
+  </form>
 </template>

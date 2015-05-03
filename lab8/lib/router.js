@@ -16,10 +16,6 @@ Router.route('/home',
     }
   },
   {name: 'home',
-    data: function() {
-      var user = Meteor.user();
-      return Courses.find({});
-    },
     waitOn: function() {
       var user = Meteor.user();
       if (user.isTeacher) {

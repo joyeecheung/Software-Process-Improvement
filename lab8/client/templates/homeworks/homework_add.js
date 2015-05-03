@@ -1,37 +1,28 @@
-Template.commentSubmit.onCreated(function() {
-  Session.set('commentSubmitErrors', {});
+Template.addHomework.onCreated(function() {
+  Session.set('homeworkAddErrors', {});
 });
 
-Template.commentSubmit.helpers({
-  errorMessage: function(field) {
-    return Session.get('commentSubmitErrors')[field];
-  },
-  errorClass: function (field) {
-    return !!Session.get('commentSubmitErrors')[field] ? 'has-error' : '';
-  }
-});
-
-Template.commentSubmit.events({
+Template.addHomework.events({
   'submit form': function(e, template) {
     e.preventDefault();
 
-    var $body = $(e.target).find('[name=body]');
-    var comment = {
-      body: $body.val(),
-      postId: template.data._id
+    var $content = $(e.target).find('[name=content]');
+    var homework = {
+      content: $content.val(),
+      requirementId: template.data._id
     };
 
     var errors = {};
-    if (! comment.body) {
-      errors.body = "Please write some content";
-      return Session.set('commentSubmitErrors', errors);
+    if (!homework.content) {
+      errors.content = "内容不能为空";
+      return Session.set('homeworkAddErrors', errors);
     }
 
-    Meteor.call('commentInsert', comment, function(error, commentId) {
+    Meteor.call('homeworkInsert', homework, function(error, homeworkId) {
       if (error){
         throwError(error.reason);
       } else {
-        $body.val('');
+        Router.go('home');
       }
     });
   }

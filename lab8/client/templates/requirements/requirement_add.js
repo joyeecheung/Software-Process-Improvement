@@ -1,34 +1,25 @@
-Template.postSubmit.events({
+Template.addRequirement.onCreated(function() {
+  Session.set('requirementAddErrors', {});
+});
+
+Template.addRequirement.events({
   'submit form': function(e) {
     e.preventDefault();
 
-    var post = {
-      url: $(e.target).find('[name=url]').val(),
-      title: $(e.target).find('[name=title]').val(),
+    var requirement = {
+      name: $(e.target).find('[name=name]').val(),
+      date: new Date($(e.target).find('[name=date]').val()),
+      courseId: $(e.target).find('[name=course]:checked').val(),
+      content: $(e.target).find('[name=content]').val()
     }
 
-    var errors = validatePost(post);
-    if (errors.title || errors.url)
-      return Session.set('postSubmitErrors', errors);
+    var errors = validateRequirement(requirement);
+    if (!_.isEmpty(errors))
+      return Session.set('requirementAddErrors', errors);
 
-    Meteor.call('postInsert', post, function(err, result) {
+    Meteor.call('requirementInsert', post, function(err, result) {
       if (err) return throwError(err.reason);
-
-      if (result.postExists) throwError('This link has already been posted');
-    
-      Router.go('postPage', {_id: result._id});
+      Router.go('home');
     });
-  }
-});
-
-Template.postSubmit.onCreated(function() {
-  Session.set('postSubmitErrors', {});
-});
-Template.postSubmit.helpers({
-  errorMessage: function(field) {
-    return Session.get('postSubmitErrors')[field];
-  },
-  errorClass: function (field) {
-    return !!Session.get('postSubmitErrors')[field] ? 'has-error' : '';
   }
 });

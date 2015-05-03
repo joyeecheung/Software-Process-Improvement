@@ -1,9 +1,19 @@
-<template name="commentItem">
-  <li>
-    <h4>
-      <span class="author">{{author}}</span>
-      <span class="date">on {{submittedText}}</span>
-    </h4>
-    <p>{{body}}</p>
-  </li>
+<template name="viewHomework">
+  <div>
+    <h1 class="submit-title">查看作业</h1>
+    <div class="alert alert-success" role="alert">
+      <p>本次作业已经截止，你提交的版本如下</p>
+    </div>
+    
+    <div>
+      <p>{{content}}</p>
+    </div>
+    <div>
+      {{#if grade}}
+        <p>分数： {{ grade }}</p>
+      {{else}}
+        <p>尚未打分</p>
+      {{/if}}
+    </div>
+  </div>
 </template>

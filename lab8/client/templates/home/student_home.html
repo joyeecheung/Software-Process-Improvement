@@ -1,23 +1,23 @@
 <template name="studentHome">
   <ul class="courses">
-    {{#each courses}}
-      {{> courseItem}}
+    {{#each getCourses}}
+      {{> studentCourseItem}}
     {{/each}}
   </ul>
 </template>
 
-<template name="courseItem">
+<template name="studentCourseItem">
   <li class="course">
     <h3>{{name}}</h3>
     <ul class="requirements">
-      {{#each requirements _id}}
-        {{> requirementItem}}
+      {{#each getRequirementsByCourse _id}}
+        {{> studentRequirementItem}}
       {{/each}}
     </ul>
   </li>
 </template>
 
-<template name="requirementItem">
+<template name="studentRequirementItem">
   <li class="requirement">
     <h4>{{name}}</h4>
     <p>
@@ -27,8 +27,8 @@
       content
     </p>
 
-    {{#if homework _id}}
-      {{#with homework _id}}
+    {{#if getHomeworkByRequirement _id}}
+      {{#with getHomeworkByRequirement _id}}
         {{> submittedHomework}}
       {{/with}}
     {{else}}
