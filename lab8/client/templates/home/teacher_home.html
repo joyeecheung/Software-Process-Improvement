@@ -19,6 +19,7 @@
 
 <template name="teacherRequirementItem">
   <li class="requirement">
+    <hr>
     <h4>{{name}}</h4>
     <p class="pull-right">
       {{#if dued deadline}}
@@ -36,9 +37,11 @@
     </p>
 
     <table class="table table-striped">
-      {{#each getHomeworksByRequirement _id}}
-        {{> teacherHomeworkItem}}
-      {{/each}}
+      <tbody>
+        {{#each getHomeworksByRequirement _id}}
+          {{> teacherHomeworkItem}}
+        {{/each}}
+      </tbody>
     </table>
   </li>
 </template>

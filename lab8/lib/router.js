@@ -20,28 +20,26 @@ Router.route('/home',
   },
   {name: 'home',
     waitOn: function() {
-      var user = Meteor.user();
-      if (user.isTeacher) {
-        return [Meteor.subscribe('courses'),
-                Meteor.subscribe('requirements'),
-                Meteor.subscribe('studentHomeworks')];
-      } else {
-        return [Meteor.subscribe('courses'),
-                Meteor.subscribe('requirements'),
-                Meteor.subscribe('teacherHomeworks')];
-      }
+      return [Meteor.subscribe('courses'),
+              Meteor.subscribe('requirements'),
+              Meteor.subscribe('homeworks')];
     }
   }
 );
 
-Router.route('/requirement/add', {name: 'addRequirement'});
+Router.route('/requirement/add', {
+  name: 'addRequirement',
+  waitOn: function() {
+    return Meteor.subscribe('courses');
+  }
+});
 Router.route('/requirement/:_id/edit', {
   name: 'editRequirement',
   data: function() {
     return Requirements.findOne(this.params._id);
   },
   waitOn: function() {
-    return Meteor.subscribe('requirements');
+    return[Meteor.subscribe('requirements'), Meteor.subscribe('courses')];
   }
 });
 Router.route('/requirement/:_id/view', {
@@ -50,17 +48,17 @@ Router.route('/requirement/:_id/view', {
     return Requirements.findOne(this.params._id);
   },
   waitOn: function() {
-    return Meteor.subscribe('requirements');
+    return [Meteor.subscribe('requirements'), Meteor.subscribe('courses')];
   }
 });
 
-Router.route('/homework/add/:requirementId', {
+Router.route('/homework/add/:_id', {
   name: 'addHomework',
   data: function() {
-    return Requirements.findOne(this.params.requirementId);
+    return Requirements.findOne(this.params._id);
   },
   waitOn: function() {
-    return Meteor.subscribe('requirements');
+    return [Meteor.subscribe('requirements'), Meteor.subscribe('courses')];
   }
 });
 Router.route('/homework/:_id/edit', {
@@ -69,7 +67,9 @@ Router.route('/homework/:_id/edit', {
     return Homeworks.findOne(this.params._id);
   },
   waitOn: function() {
-    return Meteor.subscribe('homeworks');
+    return [Meteor.subscribe('courses'),
+            Meteor.subscribe('requirements'),
+            Meteor.subscribe('homeworks')];
   }
 });
 Router.route('/homework/:_id/view', {
@@ -78,7 +78,9 @@ Router.route('/homework/:_id/view', {
     return Homeworks.findOne(this.params._id);
   },
   waitOn: function() {
-    return Meteor.subscribe('homeworks');
+    return [Meteor.subscribe('courses'),
+            Meteor.subscribe('requirements'),
+            Meteor.subscribe('homeworks')];
   }
 });
 Router.route('/homework/:_id/grade', {
@@ -87,7 +89,9 @@ Router.route('/homework/:_id/grade', {
     return Homeworks.findOne(this.params._id);
   },
   waitOn: function() {
-    return Meteor.subscribe('homeworks');
+    return [Meteor.subscribe('courses'),
+            Meteor.subscribe('requirements'),
+            Meteor.subscribe('homeworks')];
   }
 });
 

@@ -1,4 +1,12 @@
 Requirements = new Mongo.Collection('requirements');
+Requirements.allow({
+  update: function(userId, requirement) {
+    return !!userId;
+  },
+  insert: function(userId, requirement) {
+    return !!userId;
+  }
+});
 
 Requirements.deny({
   update: function() {
@@ -23,7 +31,7 @@ Meteor.methods({
       courseId: String
     });
 
-    var course = Courses.findOne(homeworkAttributes.courseId);
+    var course = Courses.findOne(requirement.courseId);
     if (!course)
       throw new Meteor.Error('invalid-homework', '作业要求必须发布到存在的课程里');
 

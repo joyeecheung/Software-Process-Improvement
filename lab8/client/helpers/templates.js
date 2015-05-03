@@ -1,7 +1,14 @@
 Template.registerHelper('getCourses', function() {
-  var courses = Meteor.user().courses;
+  var user = Meteor.user();
+  var courses = user.courses;
   return Courses.find({_id: {$in: courses}});
 });
+
+Template.registerHelper('getCourseName', function(id) {
+  var course = Courses.findOne({_id: id});
+  return course.name;
+});
+
 
 Template.registerHelper('getRequirementsByCourse', function(courseId) {
   return Requirements.find({courseId: courseId});
@@ -21,7 +28,7 @@ Template.registerHelper('formatDate', function(date) {
 });
 
 Template.registerHelper('errorMessage', function(field, store) {
-  return Session.get('store')[field];
+  return Session.get(store)[field];
 });
 
 Template.registerHelper('errorClass', function(field, store) {

@@ -16,29 +16,29 @@ Meteor.publish('requirements', function() {
   return Requirements.find({courseId: {$in: user.courses}});
 });
 
-Meteor.publish('studentHomeworks', function() {
+Meteor.publish('homeworks', function() {
   if (!this.userId) {
       this.ready();
       return;
   }
-  return Homeworks.find({
-    studentId: this.userId
-  });
+
+  var user = Meteor.users.findOne(this.userId);
+  if (user.isTeacher) {
+    return Homeworks.find();
+  } else {
+    return Homeworks.find({
+      studentId: this.userId
+    });
+  }
 });
 
-Meteor.publish('teacherHomeworks', function() {
-  if (!this.userId) {
-      this.ready();
-      return;
-  }
-  return Homeworks.find();
-});
 
 Meteor.publish("userData", function () {
   if (this.userId) {
     return Meteor.users.find({},
                              {fields: {'isTeacher': 1,
-                                      'courses': 1 }});
+                                      'courses': 1,
+                                      'profile': 1 }});
   } else {
     this.ready();
   }

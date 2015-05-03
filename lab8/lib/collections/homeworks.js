@@ -1,5 +1,14 @@
 Homeworks = new Mongo.Collection('homeworks');
 
+Homeworks.allow({
+  update: function(userId, homework) {
+    return !!userId;
+  },
+  insert: function(userId, homework) {
+    return !!userId;
+  }
+});
+
 Homeworks.deny({
   update: function(userId, homework, fieldNames, modifier) {
     var user = Meteor.user();
