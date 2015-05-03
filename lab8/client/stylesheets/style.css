@@ -1,9 +1,13 @@
 body {
-  background: #eee;
   color: #666666;
 }
 #main {
-  position: relative;
+  /*position: relative;*/
+  background-color: white;
+}
+.courses, .requirements {
+    padding: 0;
+    list-style-type: none;
 }
 .page {
   position: absolute;

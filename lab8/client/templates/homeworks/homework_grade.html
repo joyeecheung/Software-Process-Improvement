@@ -8,9 +8,9 @@
     <div class="form-group {{errorClass 'content' 'homeworkGradeErrors'}}">
       <label for="grade">分数</label>
       {{#if grade}}
-        <input name="grade" id="content" class="form-control" value="{{grade}}"></input>
+        <input name="grade" id="content" class="form-control" value="{{grade}}">
       {{else}}
-        <input name="grade" id="content" class="form-control" value="{{60}}"></input>
+        <input name="grade" id="content" class="form-control" value="60">
       {{/if}}
       <span class="help-block">{{errorMessage 'grade' 'homeworkGradeErrors'}}</span>
     </div>

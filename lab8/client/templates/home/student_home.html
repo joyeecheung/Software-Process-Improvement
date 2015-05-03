@@ -24,7 +24,7 @@
       截止日期 {{formatDate deadline}}
     </p>
     <p>
-      content
+      {{content}}
     </p>
 
     {{#if getHomeworkByRequirement _id}}
@@ -34,7 +34,6 @@
     {{else}}
       {{> emptyHomework}}
     {{/if}}
-    </ul>
   </li>
 </template>
 

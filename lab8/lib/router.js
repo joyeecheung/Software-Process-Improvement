@@ -4,7 +4,10 @@ Router.configure({
   notFoundTemplate: 'notFound'
 });
 
-Router.route('/', {name: 'index'});
+Router.route('/', {
+  name: 'index'
+});
+
 
 Router.route('/home',
   function() {
@@ -109,7 +112,3 @@ Router.onBeforeAction('dataNotFound', {only: [
 });
 
 Router.onBeforeAction(requireLogin, {except: 'index'});
-
-Accounts.onLogin(function() {
-  Router.go('home');
-});

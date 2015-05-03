@@ -1,5 +1,5 @@
 Template.teacherRequirementItem.helpers({
-  getHomeworkByRequirement: function(requirementId) {
+  getHomeworksByRequirement: function(requirementId) {
     return Homeworks.find({requirementId: requirementId});
   }
 });

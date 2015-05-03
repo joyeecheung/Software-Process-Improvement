@@ -27,10 +27,16 @@ if (Requirements.find().count() === 0) {
     profile: { name: '蛤蛤最棒' }
   });
 
-  Meteor.users.update(test2Id, {$set: {
-    isTeacher: true,
+  Meteor.users.update(testId, {$set: {
+    courses: [spiId]
   }});
-
+  Meteor.users.update(test2Id, {$set: {
+    courses: [spiId],
+    isTeacher: true
+  }});
+  Meteor.users.update(test3Id, {$set: {
+    courses: [spiId]
+  }});
   // create requirements and homeworks
   var req1Id = Requirements.insert({
     "content": "你们不要想喜欢弄个大新闻",
@@ -55,9 +61,7 @@ if (Requirements.find().count() === 0) {
   var req2Id = Requirements.insert({
     "content": "蛤蛤蛤蛤",
     "courseId": spiId,
-    "deadline": {
-      "$date": new Date("2015-04-13"),
-    },
+    "deadline": new Date("2015-04-13"),
     "name": "我有必要告诉你们一点人生的经验"
   });
 
@@ -70,9 +74,7 @@ if (Requirements.find().count() === 0) {
   var req3Id = Requirements.insert({
     "content": "识得唔识得啊",
     "courseId": spiId,
-    "deadline": {
-      "$date": new Date("2015-11-13"),
-    },
+    "deadline": new Date("2015-11-13"),
     "name": "还是要提高自己的姿势水平"
   });
 
