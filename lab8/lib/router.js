@@ -100,7 +100,7 @@ var requireLogin = function() {
     if (Meteor.loggingIn()) {
       this.render(this.loadingTemplate);
     } else {
-      this.render('accessDenied');
+      Router.go('index');
     }
   } else {
     this.next();
