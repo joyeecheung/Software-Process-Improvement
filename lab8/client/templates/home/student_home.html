@@ -1,0 +1,62 @@
+<template name="studentHome">
+  <ul class="courses">
+    {{#each courses}}
+      {{> courseItem}}
+    {{/each}}
+  </ul>
+</template>
+
+<template name="courseItem">
+  <li class="course">
+    <h3>{{name}}</h3>
+    <ul class="requirements">
+      {{#each requirements _id}}
+        {{> requirementItem}}
+      {{/each}}
+    </ul>
+  </li>
+</template>
+
+<template name="requirementItem">
+  <li class="requirement">
+    <h4>{{name}}</h4>
+    <p>
+      截止日期 {{formatDate deadline}}
+    </p>
+    <p>
+      content
+    </p>
+
+    {{#if homework _id}}
+      {{#with homework _id}}
+        {{> submittedHomework}}
+      {{/with}}
+    {{else}}
+      {{> emptyHomework}}
+    {{/if}}
+    </ul>
+  </li>
+</template>
+
+<template name="emptyHomework">
+  {{#if dued ../deadline}}
+    <div class="alert alert-warning" role="alert">
+      <p>已经截止提交</p>
+    </div>
+  {{else}}
+    <div>
+      <a href="{{pathFor 'addHomework'}}" class="btn btn-info">提交</a>
+    </div>
+  {{/if}}
+</template>
+
+
+<template name="submittedHomework">
+  {{#if dued ../deadline}}
+    <div>
+      <a href="{{pathFor 'viewHomework'}}" class="btn btn-info">查看</a>
+    </div>
+  {{else}}
+    <a href="{{pathFor 'editHomework'}}" class="btn btn-info">修改</a>
+  {{/if}}
+</template>

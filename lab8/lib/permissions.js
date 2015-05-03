@@ -1,3 +1,5 @@
-ownsDocument = function(userId, doc) {
-  return doc && doc.userId == userId;
-}
+Meteor.users.deny({
+  update: function() {
+    return true;
+  }
+});

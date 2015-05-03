@@ -1,0 +1,54 @@
+<template name="teacherHome">
+  <ul class="courses">
+    {{#each courses}}
+      {{> courseItem}}
+    {{/each}}
+  </ul>
+</template>
+
+<template name="teacherCourseItem">
+  <li class="course">
+    <h3>{{name}}</h3>
+    <ul class="requirements">
+      {{#each requirements _id}}
+        {{> requirementItem}}
+      {{/each}}
+    </ul>
+  </li>
+</template>
+
+<template name="teacherRequirementItem">
+  <li class="requirement">
+    <h4>{{name}}</h4>
+    <p class="pull-right">
+      {{#if dued deadline}}
+        <a href="pathFor 'viewRequirement'" class="requirement-change btn btn-info btn-xs">查看</a>
+      {{else}}
+        <a href="pathFor 'editRequirement'" class="requirement-change btn btn-info btn-xs">修改</a>
+      {{/if}}
+    </p>
+
+    <p>
+      截止日期 {{formatDate deadline}}
+    </p>
+    <p>
+      content
+    </p>
+
+    <table class="table table-striped">
+      {{#each homeworks _id}}
+        {{> teacherHomeworkItem}}
+      {{/each}}
+    </table>
+    </ul>
+  </li>
+</template>
+
+<template name="teacherHomeworkItem">
+  <tr>
+    <td>{{getUserName studentId}}</td>
+    <td class="text-right">
+      <a href="{{pathFor 'gradeHomework'}}" class="btn btn-info btn-xs">批改</a>
+    </td>
+  </tr>
+</template>
